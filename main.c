@@ -2,7 +2,7 @@
 
 int main(){
 
-    printf("Teste GitHub\n");
+    printf("Teste GitHub!\n");
 
     return 0;
 }
