@@ -26,8 +26,22 @@ struct ordem_de_servico {
     float valor_total;      
 };
 
+// Protótipo de Funções
+int buscarMecanicoPorId(struct mecanico* mecanicos, int qtd, int id);
+int buscarVeiculoPorPlaca(struct veiculo* veiculos, int qtd, char* placa);
+
+// CRUD Mecânicos
+void cadastrarMecanico(struct mecanico* mecanicos, int* qtd);
+void listarMecanicos(struct mecanico* mecanicos, int qtd);
+void consultarMecanico(struct mecanico* mecanicos, int qtd);
+void alterarMecanico(struct mecanico* mecanicos, int qtd);
+
+// CRUD Veículos
+void cadastrarVeiculo(struct veiculo* veiculos, int* qtd);
+void listarVeiculos(struct veiculo* veiculos, int qtd);
+void consultarVeiculo(struct veiculo* veiculos, int qtd);
+void alterarVeiculo(struct veiculo* veiculos, int qtd);
 
 int main(){    
-
     return 0;
 }
