@@ -1,47 +1,48 @@
 #include <stdio.h>
-#include <string.h> 
+#include <stdlib.h>
+#include "estruturas.h"
+#include "funcoes_oficina.c"
 
-// 1. Estrutura Mecânico
-struct mecanico {
-    int id_mecanico;       
-    char nome[100];
-    char especialidade[100];    
-    float salario;         
-};
+int main() {
+    // Declaração dos arrays e contadores
+    struct Mecanico mecanicos[5];
+    int qtdMecanicos = 0;
 
-// 2. Estrutura Veículo
-struct veiculo {
-    char placa_veiculo[15]; 
-    char modelo[50];
-    int ano;
-    char telefone_dono[20];
-};
+    // Reservado para futuras implementações
+    // struct Veiculo veiculos[5];
+    // int qtdVeiculos = 0;
 
-// 3. Estrutura Ordem de Serviço
-struct ordem_de_servico {
-    int numero_os;          
-    int id_mecanico;        
-    char placa_veiculo[15]; 
-    char data_servico[11];  
-    float valor_total;      
-};
+    int opcao;
 
-// Protótipo de Funções
-int buscarMecanicoPorId(struct mecanico* mecanicos, int qtd, int id);
-int buscarVeiculoPorPlaca(struct veiculo* veiculos, int qtd, char* placa);
+    do {
+        printf("\n===================================================\n");
+        printf("           SISTEMA DE GERENCIA DA OFICINA\n");
+        printf("===================================================\n");
+        printf("             1 - Gerenciar Mecanicos.               \n");
+        printf("             2 - Gerenciar Veiculos.                \n");
+        printf("             3 - Sair.                              \n");
+        printf("===================================================\n");
+        printf("Escolha uma opcao: ");
+        
+        if (scanf("%d", &opcao) != 1) {
+            printf("\nEntrada invalida!\n");
+            break;
+        }
 
-// CRUD Mecânicos
-void cadastrarMecanico(struct mecanico* mecanicos, int* qtd);
-void listarMecanicos(struct mecanico* mecanicos, int qtd);
-void consultarMecanico(struct mecanico* mecanicos, int qtd);
-void alterarMecanico(struct mecanico* mecanicos, int qtd);
+        switch (opcao) {
+            case 1:
+                gerenciarMecanicos(mecanicos, &qtdMecanicos);
+                break;
+            case 2:
+                printf("\nModulo de Veiculos em desenvolvimento\n");
+                break;
+            case 3:
+                printf("\nSaindo do sistema.\n");
+                break;
+            default:
+                printf("\nOpcao Invalida!\n");
+        }
+    } while(opcao != 3);
 
-// CRUD Veículos
-void cadastrarVeiculo(struct veiculo* veiculos, int* qtd);
-void listarVeiculos(struct veiculo* veiculos, int qtd);
-void consultarVeiculo(struct veiculo* veiculos, int qtd);
-void alterarVeiculo(struct veiculo* veiculos, int qtd);
-
-int main(){    
     return 0;
 }
