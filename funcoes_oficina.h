@@ -28,5 +28,12 @@ struct Ordem_Servico{
 int switch_case_crud(char tipo[]);
 void gerenciarMecanico (struct Mecanico *mecanicos, int *qtd_mec);
 
+void cadastrarMecanico(struct Mecanico* mecanicos, int* qtd_mec);
+
+void alterarMecanico(struct Mecanico *mecanicos, int qtd_mec);
+
+void consultarMecanico(struct Mecanico mecanicos[], int qtd_mec);
+
+void removerMecanico(struct Mecanico mecanicos[], int *qtd_mec);
 
 #endif
