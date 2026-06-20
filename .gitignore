@@ -1,1 +1,7 @@
 output/
+*.o
+*.obj
+*.exe
+main
+a.out
+.vscode/
