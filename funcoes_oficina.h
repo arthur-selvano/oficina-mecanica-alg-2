@@ -21,7 +21,7 @@ typedef struct
 } Lista_servico;
 
 int switch_case_crud(char tipo[]);
-void gerenciarMecanico(Lista_mecanico *);
+void gerenciarMecanicos(Lista_mecanico *);
 void gerenciarVeiculos(Lista_veiculo *);
 
 Lista_servico *criarListaServico(int);

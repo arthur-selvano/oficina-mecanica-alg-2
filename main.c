@@ -29,10 +29,10 @@ int main()
         switch (opcao)
         {
         case 1:
-            gerenciarMecanico(lista_mec);
+            gerenciarMecanicos(lista_mec);
             break;
         case 2:
-            gerenciarVeiculo(lista_veiculo);
+            gerenciarVeiculos(lista_veiculo);
             break;
         case 3:
             break;

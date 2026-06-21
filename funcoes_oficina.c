@@ -24,7 +24,7 @@ int switch_case_crud(char tipo[])
     return opcao;
 }
 
-void gerenciarMecanico(Lista_mecanico *lista_mec)
+void gerenciarMecanicos(Lista_mecanico *lista_mec)
 {
 
     int opcao;
