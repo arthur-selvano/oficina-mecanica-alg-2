@@ -107,6 +107,7 @@ Veiculo *buscaVeiculoPlaca(Lista_veiculo *lista_veiculo, char placa[10])
             return &lista_veiculo->veiculos[i];
         }
     }
+    return NULL;
 }
 
 void alterarVeiculo(Lista_veiculo *lista_veiculo)

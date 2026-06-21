@@ -32,6 +32,7 @@ int main()
             gerenciarMecanico(lista_mec);
             break;
         case 2:
+            gerenciarVeiculo(lista_veiculo);
             break;
         case 3:
             break;

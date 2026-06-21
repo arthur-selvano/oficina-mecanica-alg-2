@@ -132,6 +132,7 @@ void removerMecanico(Lista_mecanico *lista_mec)
             }
             (*qtd)--;
             printf("\nMecanico removido com sucesso!\n");
+            return;
         }
     }
 }
@@ -157,7 +158,7 @@ void listarMecanicos(Lista_mecanico *lista_mec)
 
     for (int i = 0; i < lista_mec->qtd_mec; i++)
     {
-        printVeiculo(&lista_mec->mecanicos[i]);
+        printMecanico(&lista_mec->mecanicos[i]);
     }
 }
 
