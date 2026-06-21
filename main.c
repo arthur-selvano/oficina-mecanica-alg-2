@@ -2,23 +2,23 @@
 #include <stdlib.h>
 #include "funcoes_oficina.h"
 
+int main()
+{
 
-int main (){
-    
-    struct Mecanico mecanicos[5];
-    struct Veiculo veiculos[5];
-    struct Ordem_Servico ordem_servico[5];
+    Lista_mecanico *lista_mec = criarListaMecanico(5);
+    Lista_veiculo *lista_veiculo = criarListaVeiculo(5);
+    Lista_servico *lista_servico = criarListaServico(5);
 
     int opcao;
-    int qtd_mecanicos = 0;
 
-    do{
+    do
+    {
         printf("\n===================================================\n");
         printf("           SISTEMA DE GERENCIA DA OFICINA\n");
         printf("===================================================\n");
         printf("             1 - Gerenciar Mecanicos.               \n");
         printf("             2 - Gerenciar Veiculos.                \n");
-       //printf("             3 - Gerenciar Ordem de Servico.        \n");
+        // printf("             3 - Gerenciar Ordem de Servico.        \n");
         printf("             4 - Sair...                            \n");
         printf("===================================================\n");
         printf("| | | | | | | |  ESCOLHA UMA OPCAO  | | | | | | | |\n\n");
@@ -26,11 +26,13 @@ int main (){
         fflush(stdin);
         scanf("%d", &opcao);
 
-        switch (opcao){
+        switch (opcao)
+        {
         case 1:
-            gerenciarMecanico(mecanicos, &qtd_mecanicos);
+            gerenciarMecanicos(lista_mec);
             break;
         case 2:
+            gerenciarVeiculos(lista_veiculo);
             break;
         case 3:
             break;
@@ -42,7 +44,11 @@ int main (){
             break;
         }
 
-    }while(opcao != 4);
+    } while (opcao != 4);
+    
+    liberarListaMecanico(lista_mec);
+    liberarListaVeiculo(lista_veiculo);
+    liberarListaServico(lista_servico);
 
     system("pause");
     return 0;
