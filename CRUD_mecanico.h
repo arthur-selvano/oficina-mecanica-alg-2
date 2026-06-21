@@ -19,7 +19,7 @@ void cadastrarMecanico(Lista_mecanico *);
 void alterarMecanico(Lista_mecanico *);
 void consultarMecanico(Lista_mecanico *);
 void removerMecanico(Lista_mecanico *);
-void listarMecanico(Lista_mecanico *);
+void listarMecanicos(Lista_mecanico *);
 
 Mecanico *buscaMecanicoId(Lista_mecanico *, int);
 void printMecanico(Mecanico *);
