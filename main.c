@@ -19,7 +19,7 @@ int main()
         printf("             1 - Gerenciar Mecanicos.               \n");
         printf("             2 - Gerenciar Veiculos.                \n");
         // printf("             3 - Gerenciar Ordem de Servico.        \n");
-        printf("             4 - Sair...                            \n");
+        printf("             3 - Sair...                            \n");
         printf("===================================================\n");
         printf("| | | | | | | |  ESCOLHA UMA OPCAO  | | | | | | | |\n\n");
         printf("Escolha: ");
@@ -35,8 +35,6 @@ int main()
             gerenciarVeiculos(lista_veiculo);
             break;
         case 3:
-            break;
-        case 4:
             printf("\n| | | | | | | |   SISTEMA FECHADO   | | | | | | | |\n\n\n\n\n");
             break;
         default:
@@ -44,7 +42,7 @@ int main()
             break;
         }
 
-    } while (opcao != 4);
+    } while (opcao != 3);
     
     liberarListaMecanico(lista_mec);
     liberarListaVeiculo(lista_veiculo);

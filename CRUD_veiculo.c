@@ -3,16 +3,6 @@
 #include <string.h>
 #include "CRUD_veiculo.h"
 
-// ==================== ESTRUTURAS ====================
-
-struct Veiculo
-{
-    char placa_veiculo[10];
-    char modelo[50];
-    int ano;
-    char telefone_dono[15];
-};
-
 // ==================== CRUD VEÍCULOS ====================
 
 void cadastrarVeiculo(Lista_veiculo *lista_veiculo)
