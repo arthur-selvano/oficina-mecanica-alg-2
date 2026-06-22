@@ -20,6 +20,8 @@ void alterarVeiculo(Lista_veiculo *);
 void consultarVeiculo(Lista_veiculo *);
 void removerVeiculo(Lista_veiculo *);
 void listarVeiculos(Lista_veiculo *);
+int existeRegistroVeiculo(Lista_veiculo *);
+
 
 Veiculo *buscaVeiculoPlaca(Lista_veiculo *, char placa[10]);
 void printVeiculo(Veiculo *);

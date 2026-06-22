@@ -45,9 +45,7 @@ void cadastrarVeiculo(Lista_veiculo *lista_veiculo)
 void listarVeiculos(Lista_veiculo *lista_veiculo)
 {
 
-    if (lista_veiculo->qtd_veiculos == 0)
-    {
-        printf("\nNenhum veiculo cadastrado.\n");
+    if(!existeRegistroVeiculo(lista_veiculo)){
         return;
     }
 
@@ -69,7 +67,9 @@ void printVeiculo(Veiculo *veiculo)
 
 void consultarVeiculo(Lista_veiculo *lista_veiculo)
 {
-
+    if(!existeRegistroVeiculo(lista_veiculo)){
+        return;
+    } 
     char placa[10];
 
     printf("\nDigite a placa do veiculo: ");
@@ -102,6 +102,9 @@ Veiculo *buscaVeiculoPlaca(Lista_veiculo *lista_veiculo, char placa[10])
 
 void alterarVeiculo(Lista_veiculo *lista_veiculo)
 {
+    if(!existeRegistroVeiculo(lista_veiculo)){
+        return;
+    }
 
     char placa[10];
 
@@ -130,17 +133,14 @@ void alterarVeiculo(Lista_veiculo *lista_veiculo)
 
 void removerVeiculo(Lista_veiculo *veiculos)
 {
-
+    if(!existeRegistroVeiculo(veiculos)){
+        return;
+    }
     char placa[10];
 
     printf("\nDigite a placa do veiculo: ");
     scanf("%9s", placa);
 
-    if (veiculos->qtd_veiculos == 0)
-    {
-        printf("\nNenhum veiculo cadastrado.\n");
-        return;
-    }
 
     if (buscaVeiculoPlaca(veiculos, placa) == NULL)
     {
@@ -161,6 +161,15 @@ void removerVeiculo(Lista_veiculo *veiculos)
             return;
         }
     }
+}
+
+int existeRegistroVeiculo(Lista_veiculo *lista_veiculo){
+    if (lista_veiculo->qtd_veiculos == 0) 
+    {
+        printf("\nNenhum veiculo cadastrado.\n");
+        return 0;
+    }
+    return 1;
 }
 
 Lista_veiculo *criarListaVeiculo(int tamanho)

@@ -48,6 +48,10 @@ void alterarMecanico(Lista_mecanico *lista_mec)
 
     int id;
 
+    if(!existeRegistro(lista_mec)){
+        return;
+    }
+
     printf("\n====== ALTERAR MECANICO ======\n");
     printf("Digite o ID do mecanico: ");
     scanf("%d", &id);
@@ -83,7 +87,9 @@ void alterarMecanico(Lista_mecanico *lista_mec)
 
 void consultarMecanico(Lista_mecanico *lista_mec)
 {
-
+    if(!existeRegistro(lista_mec)){
+        return;
+    }
     int id;
 
     printf("Digite o ID do mecanico: ");
@@ -108,6 +114,10 @@ void removerMecanico(Lista_mecanico *lista_mec)
 {
     int *qtd = &lista_mec->qtd_mec;
     int id;
+
+    if(!existeRegistro(lista_mec)){
+        return;
+    }
 
     printf("\n====== REMOVER MECANICO ======\n");
     printf("Digite o ID do mecanico: ");
@@ -148,9 +158,7 @@ void printMecanico(Mecanico *mecanico)
 void listarMecanicos(Lista_mecanico *lista_mec)
 {
 
-    if (lista_mec->qtd_mec == 0)
-    {
-        printf("\nNenhum mecanico cadastrado.\n");
+    if(!existeRegistro(lista_mec)){
         return;
     }
 
@@ -178,6 +186,15 @@ Mecanico *buscaMecanicoId(Lista_mecanico *lista_mec, int id_mecanico) // busca m
     }
 
     return NULL;
+}
+
+int existeRegistro(Lista_mecanico *lista_mec){
+    if (lista_mec->qtd_mec == 0) 
+    {
+        printf("\nNenhum mecanico cadastrado.\n");
+        return 0;
+    }
+    return 1;
 }
 
 Lista_mecanico *criarListaMecanico(int tamanho)
