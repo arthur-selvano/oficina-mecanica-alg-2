@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include "CRUD_veiculo.h"
 
 // ==================== CRUD VEÍCULOS ====================
@@ -20,7 +21,9 @@ void cadastrarVeiculo(Lista_veiculo *lista_veiculo)
     {
         printf("\nPlaca: ");
         scanf("%9s", NovoVeiculo->placa_veiculo);
+        strcpy(NovoVeiculo->placa_veiculo, placaMaiusculo(NovoVeiculo->placa_veiculo));
 
+        
         if (buscaVeiculoPlaca(lista_veiculo, NovoVeiculo->placa_veiculo) != NULL)
         {
             printf("Atenção essa placa ja existe!\n\n");
@@ -74,6 +77,7 @@ void consultarVeiculo(Lista_veiculo *lista_veiculo)
 
     printf("\nDigite a placa do veiculo: ");
     scanf("%9s", placa);
+    strcpy(placa, placaMaiusculo(placa));
 
     Veiculo *veiculo = buscaVeiculoPlaca(lista_veiculo, placa);
 
@@ -110,6 +114,7 @@ void alterarVeiculo(Lista_veiculo *lista_veiculo)
 
     printf("\nDigite a placa do veiculo: ");
     scanf("%9s", placa);
+    strcpy(placa, placaMaiusculo(placa));
 
     Veiculo *veiculo = buscaVeiculoPlaca(lista_veiculo, placa);
 
@@ -140,7 +145,9 @@ void removerVeiculo(Lista_veiculo *veiculos)
 
     printf("\nDigite a placa do veiculo: ");
     scanf("%9s", placa);
+    strcpy(placa, placaMaiusculo(placa));
 
+    
 
     if (buscaVeiculoPlaca(veiculos, placa) == NULL)
     {
@@ -170,6 +177,14 @@ int existeRegistroVeiculo(Lista_veiculo *lista_veiculo){
         return 0;
     }
     return 1;
+}
+
+char* placaMaiusculo(char placa[10]){
+    for (int i = 0; placa[i] != '\0'; i++)
+        {
+            placa[i] = toupper(placa[i]);
+        }
+        return placa;
 }
 
 Lista_veiculo *criarListaVeiculo(int tamanho)
