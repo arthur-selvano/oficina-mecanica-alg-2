@@ -19,7 +19,6 @@ int switch_case_crud(char tipo[])
     printf("===================================================\n");
     printf("| | | | | | | |  ESCOLHA UMA OPCAO  | | | | | | | |\n\n");
     printf("Escolha: ");
-    fflush(stdin);
     scanf("%d", &opcao);
     return opcao;
 }

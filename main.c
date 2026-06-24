@@ -23,7 +23,6 @@ int main()
         printf("===================================================\n");
         printf("| | | | | | | |  ESCOLHA UMA OPCAO  | | | | | | | |\n\n");
         printf("Escolha: ");
-        fflush(stdin);
         scanf("%d", &opcao);
 
         switch (opcao)
