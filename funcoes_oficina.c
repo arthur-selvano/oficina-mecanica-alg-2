@@ -111,23 +111,43 @@ void gerenciarVeiculos(Lista_veiculo *lista_veiculos)
     } while (opcao != 6);
 }
 
-Lista_servico *criarListaServico(int tamanho)
+void gerenciarServico(Lista_servico *lista_servico)
 {
-    Lista_servico *lista_servico = malloc(sizeof(Lista_servico));
-    lista_servico->qtd_servicos = 0;
-    lista_servico->qtd_max = tamanho;
-    lista_servico->ordem_servicos = malloc(tamanho * sizeof(Ordem_servico));
 
-    if (lista_servico == NULL)
+    int opcao;
+
+    do
     {
-        printf("\nMemoria insuficiente!\n");
-        return NULL;
-    }
-    return lista_servico;
+
+        opcao = switch_case_crud("Ordem de Servico");
+
+        switch (opcao)
+        {
+
+        case 1:
+            break;
+
+        case 2:
+            break;
+
+        case 3:
+            break;
+
+        case 4:
+            break;
+
+        case 5:
+            break;
+
+        case 6:
+            printf("\nVoltando ao menu principal...\n");
+            break;
+        default:
+            printf("\nOpcao Invalida! Escolha Uma Correta!\n\n");
+            opcao = switch_case_crud("Ordem de Servico");
+            break;
+        }
+
+    } while (opcao != 6);
 }
 
-void liberarListaServico(Lista_servico *lista_servico)
-{
-    free(lista_servico->ordem_servicos);
-    free(lista_servico);
-}
