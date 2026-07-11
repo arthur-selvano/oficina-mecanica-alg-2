@@ -5,7 +5,7 @@
 int main()
 {
 
-    Lista_mecanico *lista_mec = criarListaMecanico(5);
+    Lista_mecanico *lista_mecanico = criarListaMecanico(5);
     Lista_veiculo *lista_veiculo = criarListaVeiculo(5);
     Lista_servico *lista_servico = criarListaServico(5);
 
@@ -18,8 +18,8 @@ int main()
         printf("===================================================\n");
         printf("             1 - Gerenciar Mecanicos.               \n");
         printf("             2 - Gerenciar Veiculos.                \n");
-        // printf("             3 - Gerenciar Ordem de Servico.        \n");
-        printf("             3 - Sair...                            \n");
+        printf("             3 - Gerenciar Ordem de Servico.        \n");
+        printf("             4 - Sair...                            \n");
         printf("===================================================\n");
         printf("| | | | | | | |  ESCOLHA UMA OPCAO  | | | | | | | |\n\n");
         printf("Escolha: ");
@@ -28,12 +28,15 @@ int main()
         switch (opcao)
         {
         case 1:
-            gerenciarMecanicos(lista_mec);
+            gerenciarMecanicos(lista_mecanico);
             break;
         case 2:
             gerenciarVeiculos(lista_veiculo);
             break;
         case 3:
+            gerenciarServicos(lista_servico);
+            break;
+        case 4:
             printf("\n| | | | | | | |   SISTEMA FECHADO   | | | | | | | |\n\n\n\n\n");
             break;
         default:
@@ -41,9 +44,9 @@ int main()
             break;
         }
 
-    } while (opcao != 3);
+    } while (opcao != 4);
     
-    liberarListaMecanico(lista_mec);
+    liberarListaMecanico(lista_mecanico);
     liberarListaVeiculo(lista_veiculo);
     liberarListaServico(lista_servico);
 

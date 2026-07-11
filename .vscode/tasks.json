@@ -10,6 +10,7 @@
                 "funcoes_oficina.c",
                 "CRUD_mecanico.c",
                 "CRUD_veiculo.c",
+                "CRUD_servico.c",
                 "${file}",
                 "-o",
                 "${fileDirname}/${fileBasenameNoExtension}"

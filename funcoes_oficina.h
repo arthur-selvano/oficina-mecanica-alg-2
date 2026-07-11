@@ -9,6 +9,6 @@
 int switch_case_crud(char tipo[]);
 void gerenciarMecanicos(Lista_mecanico *);
 void gerenciarVeiculos(Lista_veiculo *);
-void gerenciarServico(Lista_servico *);
+void gerenciarServicos(Lista_servico *);
 
 #endif

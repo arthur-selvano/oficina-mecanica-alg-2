@@ -111,7 +111,7 @@ void gerenciarVeiculos(Lista_veiculo *lista_veiculos)
     } while (opcao != 6);
 }
 
-void gerenciarServico(Lista_servico *lista_servico)
+void gerenciarServicos(Lista_servico *lista_servico)
 {
 
     int opcao;

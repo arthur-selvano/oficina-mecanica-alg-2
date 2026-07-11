@@ -1,6 +1,9 @@
 #ifndef CRUD_SERVICO_H
 #define CRUD_SERVICO_H
 
+
+void cadastrarServico(Lista_servico *);
+
 typedef struct
 {
     int numero_os;

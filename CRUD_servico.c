@@ -2,6 +2,13 @@
 #include <stdlib.h>
 #include "CRUD_servico.h"
 
+void cadastrarServico(Lista_servico *lista_servico){
+
+    Lista_servico *NovoServico = &lista_servico->ordem_servicos[lista_servico->qtd_servicos];
+
+
+}
+
 
 Lista_servico *criarListaServico(int tamanho)
 {
