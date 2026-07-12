@@ -137,13 +137,13 @@ void listarServico(Lista_servico *lista_servico, Lista_mecanico *lista_mec, List
         placaMaiusculo(placa);
         break;
     case 3:
-        printf("\nData do Serviço: ");
+        printf("\nData do Serviço (DD/MM/AAAA): ");
         scanf("%14s", data);
         break;
 
     default:
         printf("Opcao Invalida!\n");
-        break;
+        return;
     }
 
     printf("=========== RESULTADO ===========");
@@ -151,6 +151,12 @@ void listarServico(Lista_servico *lista_servico, Lista_mecanico *lista_mec, List
     for (int i = 0; i < lista_servico->qtd_servicos; i++)
     {
         Ordem_servico *servico = &lista_servico->ordem_servicos[i];
+
+        if(servico == NULL){
+            printf("\nNao ha registro de servico!\n");
+            return;
+        }
+
         int escolha = 0;
 
         if((opcao == 1) && (servico->id_mecanico == id)){
@@ -165,23 +171,19 @@ void listarServico(Lista_servico *lista_servico, Lista_mecanico *lista_mec, List
 
         if(escolha){
             encontrado = 1;
-            Mecanico *mecanico = buscaMecanicoId(lista_mec, id);
-            Veiculo *veiculo = buscaVeiculoPlaca(lista_veiculo, placa);
+            Mecanico *mecanico = buscaMecanicoId(lista_mec, servico->id_mecanico);
+            Veiculo *veiculo = buscaVeiculoPlaca(lista_veiculo, servico->placa_veiculo);
             
-            if(mecanico == NULL || veiculo == NULL){
-                printf("Nao encontrado o mecanico ou veiculo!\n");
-                return;
-            }
-
             printf("\nNumero OS: %d", servico->numero_os);
             printf("\nData: %s", servico->data_servico);
             printf("\nMecanico: %s", mecanico->nome);
             printf("\nVeiculo: %s", veiculo->modelo);
             printf("\nServico Realizado: %s", servico->servico_realizado);
+            printf("\n-----------------------------------------");
         }
     }
     if(!encontrado){
-        printf("Nao ha registro!\n");
+        printf("\nNao ha registro!\n");
         
     }
     
@@ -222,7 +224,13 @@ int validarID(Lista_mecanico *lista_mec)
     int id;
     do
     {
-        printf("ID: ");
+        printf("ID's disponiveis: ");
+        for (int i = 0; i < lista_mec->qtd_mec; i++)
+        {
+            printf("- (%d) -", lista_mec->mecanicos[i].id_mecanico);
+        }
+        
+        printf("\nID: ");
         scanf("%d", &id);
 
         if (buscaMecanicoId(lista_mec, id) == NULL)
@@ -240,6 +248,13 @@ void validarPlaca(Lista_veiculo *lista_veiculo, char *endPlaca)
 
     do
     {
+
+        printf("Placas disponiveis: ");
+        for (int i = 0; i < lista_veiculo->qtd_veiculos; i++)
+        {
+            printf("- (%s) -", lista_veiculo->veiculos[i].placa_veiculo);
+        }
+        
         printf("\nPlaca: ");
         scanf("%9s", endPlaca);
         placaMaiusculo(endPlaca);
