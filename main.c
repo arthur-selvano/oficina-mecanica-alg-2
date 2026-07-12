@@ -28,13 +28,13 @@ int main()
         switch (opcao)
         {
         case 1:
-            gerenciarMecanicos(lista_mecanico);
+            gerenciarMecanicos(lista_mecanico, lista_servico);
             break;
         case 2:
-            gerenciarVeiculos(lista_veiculo);
+            gerenciarVeiculos(lista_veiculo, lista_servico);
             break;
         case 3:
-            gerenciarServicos(lista_servico);
+            gerenciarServicos(lista_servico, lista_mecanico, lista_veiculo);
             break;
         case 4:
             printf("\n| | | | | | | |   SISTEMA FECHADO   | | | | | | | |\n\n\n\n\n");

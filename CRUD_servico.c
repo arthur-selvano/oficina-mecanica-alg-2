@@ -1,14 +1,275 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "CRUD_servico.h"
+#include "funcoes_oficina.h"
 
-void cadastrarServico(Lista_servico *lista_servico){
+void cadastrarServico(Lista_servico *lista_servico, Lista_mecanico *lista_mec, Lista_veiculo *lista_veiculo)
+{
 
-    Lista_servico *NovoServico = &lista_servico->ordem_servicos[lista_servico->qtd_servicos];
+    Ordem_servico *NovoServico = &lista_servico->ordem_servicos[lista_servico->qtd_servicos];
 
+    printf("\n====== CADASTRO DE OD. SERVICO ======\n");
+
+    if (lista_servico->qtd_servicos == lista_servico->qtd_max)
+    {
+        printf("\nLimite de OD. Servico atingido!\n");
+        return;
+    }
+
+    NovoServico->id_mecanico = validarID(lista_mec);
+    validarPlaca(lista_veiculo, NovoServico->placa_veiculo);
+    NovoServico->numero_os = validarOS(lista_servico);
+
+    printf("Data do serviço (DD/MM/AAAA): ");
+    scanf("%14s", NovoServico->data_servico);
+
+    printf("Servico realizado: ");
+    scanf(" %[^\n]", NovoServico->servico_realizado);
+
+    printf("Valor total: ");
+    scanf("%f", &NovoServico->valor_total);
+
+    (lista_servico->qtd_servicos)++;
+
+    printf("\nOrdem de servico cadastrada com sucesso!\n");
+}
+
+void alterarServico(Lista_servico *lista_servico, Lista_mecanico *lista_mec, Lista_veiculo *lista_veiculo){
+
+    int os;
+
+    printf("\n Digite o numero OS: ");
+    scanf("%d", &os);
+
+    Ordem_servico *Servico = buscaOS(lista_servico, os);
+
+    if(Servico == NULL){
+        printf("Numero OS nao encontrado!\n");
+        return;
+    }
+
+    Servico->numero_os = validarOS(lista_servico);
+    Servico->id_mecanico = validarID(lista_mec);
+    validarPlaca(lista_veiculo, Servico->placa_veiculo);
+
+    printf("Data do serviço (DD/MM/AAAA): ");
+    scanf("%14s", Servico->data_servico);
+
+    printf("Servico realizado: ");
+    scanf(" %[^\n]", Servico->servico_realizado);
+
+    printf("Valor total: ");
+    scanf("%f", &Servico->valor_total);
 
 }
 
+void removerServico(Lista_servico *lista_servico){
+
+    int os;
+
+    printf("\nNumero OS: ");
+    scanf("%d", &os);
+
+    if(buscaOS(lista_servico, os) == NULL){
+        printf("Numero OS nao encontrado!\n");
+        return;
+    }
+
+    for (int i = 0; i < lista_servico->qtd_servicos; i++)
+    {
+        if(lista_servico->ordem_servicos[i].numero_os == os){
+            for (int j = 0; j < lista_servico->qtd_servicos - 1; j++)
+            {
+                lista_servico->ordem_servicos[j] = lista_servico->ordem_servicos[j+1];
+            }
+            (lista_servico->qtd_servicos)--;
+            printf("\nOrdem de servico removida com sucesso!\n");
+            return;
+        }
+    }
+}
+
+void consultarServico(Lista_servico *lista_servico){
+
+    int os;
+
+    printf("\nNumero OS: ");
+    scanf("%d", &os);
+
+    
+    Ordem_servico *Servico = buscaOS(lista_servico, os);
+
+    if(Servico == NULL){
+        printf("\nOrdem de servico nao encontrada!\n");
+        return;
+    }
+    printServico(Servico);
+
+}
+
+void listarServico(Lista_servico *lista_servico, Lista_mecanico *lista_mec, Lista_veiculo *lista_veiculo){
+    if(lista_servico->qtd_servicos == 0){
+        printf("\nNao ha ordens de servicos!\n");
+        return;
+    }
+
+    int opcao;
+    printf("\n====== FILTRAR ORDENS DE SERVICO ======\n");
+    printf("1 - Filtrar por ID do Mecanico\n");
+    printf("2 - Filtrar por Placa do Veiculo\n");
+    printf("3 - Filtrar por Data do Servico\n");
+    printf("Escolha uma opcao: ");
+    scanf("%d", &opcao);
+
+    int id, encontrado;
+    char placa[10];
+    char data[15];
+
+    switch (opcao)
+    {
+    case 1:
+        printf("\nID: ");
+        scanf("%d", &id);
+        break;
+    case 2:
+        printf("\nPlaca do Veiculo: ");
+        scanf("%9s", placa);
+        strcpy(placa, placaMaiusculo(placa));
+        break;
+    case 3:
+        printf("\nData do Serviço: ");
+        scanf("%14s", data);
+        break;
+
+    default:
+        printf("Opcao Invalida!\n");
+        break;
+    }
+
+    printf("=========== RESULTADO ===========");
+
+    for (int i = 0; i < lista_servico->qtd_servicos; i++)
+    {
+        Ordem_servico *servico = &lista_servico->ordem_servicos[i];
+        int escolha = 0;
+
+        if((opcao == 1) && (servico->id_mecanico == id)){
+            escolha = 1;
+        }
+        if((opcao == 2) && (strcmp(lista_servico->ordem_servicos->placa_veiculo, placa) == 0)){
+            escolha = 1;
+        }
+        if((opcao == 3) && (strcmp(lista_servico->ordem_servicos->data_servico, data) == 0)){
+            escolha = 1;
+        }
+
+        if(escolha){
+            encontrado = 1;
+            Mecanico *mecanico = buscaMecanicoId(lista_mec, id);
+            Veiculo *veiculo = buscaVeiculoPlaca(lista_veiculo, placa);
+            
+            if(mecanico == NULL || veiculo == NULL){
+                printf("Nao encontrado o mecanico ou veiculo!\n");
+                return;
+            }
+
+            printf("\nNumero OS: %d", servico->id_mecanico);
+            printf("\nData: %s", servico->data_servico);
+            printf("\nMecanico: %s", mecanico->nome);
+            printf("\nVeiculo: %s", veiculo->modelo);
+            printf("\nServico Realizado: %s", servico->servico_realizado);
+        }
+    }
+    if(!encontrado){
+        printf("Nao ha registro!\n");
+        
+    }
+    
+}
+
+
+void printServico(Ordem_servico *servico){
+
+    printf("\nID Mecanico: %d", servico->id_mecanico);
+    printf("\nPlaca Veiculo: %s", servico->placa_veiculo);
+    printf("\nNumero OS: %d", servico->numero_os);
+    printf("\nData do Servico: %s", servico->data_servico);
+    printf("\nServico Realizado: %s", servico->servico_realizado);
+    printf("\nValor Total: R$%.2f", servico->valor_total);
+
+}
+
+Ordem_servico *buscaOS(Lista_servico *lista_servico, int os)
+{
+
+    if (lista_servico->qtd_servicos == 0)
+    {
+        return NULL;
+    }
+    for (int i = 0; i < lista_servico->qtd_servicos; i++)
+    {
+        if (lista_servico->ordem_servicos[i].numero_os == os)
+        {
+            return &lista_servico->ordem_servicos[i];
+        }
+    }
+    return NULL;
+}
+
+int validarID(Lista_mecanico *lista_mec)
+{
+
+    int id;
+    do
+    {
+        printf("ID: ");
+        scanf("%d", &id);
+
+        if (buscaMecanicoId(lista_mec, id) == NULL)
+        {
+            printf("Atenção esse ID nao existe!\n\n");
+        }
+
+    } while (buscaMecanicoId(lista_mec, id) == NULL);
+
+    return id;
+}
+
+void validarPlaca(Lista_veiculo *lista_veiculo, char *endPlaca)
+{
+
+    do
+    {
+        printf("\nPlaca: ");
+        scanf("%9s", endPlaca);
+        strcpy(endPlaca, placaMaiusculo(endPlaca));
+
+        if (buscaVeiculoPlaca(lista_veiculo, endPlaca) == NULL)
+        {
+            printf("Atenção essa placa nao existe!\n\n");
+        }
+
+    } while (buscaVeiculoPlaca(lista_veiculo, endPlaca) == NULL);
+}
+
+int validarOS(Lista_servico *lista_servico)
+{
+
+    int os;
+    do
+    {
+        printf("\nNumero OS: ");
+        scanf("%d", &os);
+
+        if (buscaOS(lista_servico, os) != NULL)
+        {
+            printf("Atenção essa OS ja existe!\n\n");
+        }
+
+    } while (buscaOS(lista_servico, os) != NULL);
+    return os;
+}
 
 Lista_servico *criarListaServico(int tamanho)
 {

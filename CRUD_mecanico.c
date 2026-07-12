@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "CRUD_mecanico.h"
+#include "funcoes_oficina.h"
 
 //===========================================================================
 // FUNÇÃO 1 CADASTRO_MECANICO;
@@ -66,9 +67,6 @@ void alterarMecanico(Lista_mecanico *lista_mec)
 
     printf("\nMecanico encontrado!\n");
 
-    printf("Novo ID: ");
-    scanf("%d", &mecanico->id_mecanico);
-
     printf("Novo nome: ");
     scanf(" %[^\n]", mecanico->nome);
 
@@ -110,7 +108,7 @@ void consultarMecanico(Lista_mecanico *lista_mec)
 //===========================================================================
 // FUNÇÃO 4 REMOVE_MECANICO;
 
-void removerMecanico(Lista_mecanico *lista_mec)
+void removerMecanico(Lista_mecanico *lista_mec, Lista_servico *lista_servico)
 {
     int *qtd = &lista_mec->qtd_mec;
     int id;
@@ -131,6 +129,15 @@ void removerMecanico(Lista_mecanico *lista_mec)
         return;
     }
 
+    for (int i = 0; i < lista_servico->qtd_servicos; i++)
+    {
+        if(lista_servico->ordem_servicos[i].id_mecanico == id){
+            printf("Remocao negada, ha registro do mecanico\nem uma ordem de servio\n");
+            return;
+        }
+    }
+    
+    
     for (int i = 0; i < *qtd; i++)
     {
         if (lista_mec->mecanicos[i].id_mecanico == id)

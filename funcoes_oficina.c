@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "funcoes_oficina.h"
-#include "CRUD_mecanico.h"
+
 
 int switch_case_crud(char tipo[])
 {
@@ -23,7 +23,7 @@ int switch_case_crud(char tipo[])
     return opcao;
 }
 
-void gerenciarMecanicos(Lista_mecanico *lista_mec)
+void gerenciarMecanicos(Lista_mecanico *lista_mec, Lista_servico *lista_servico)
 {
 
     int opcao;
@@ -47,7 +47,7 @@ void gerenciarMecanicos(Lista_mecanico *lista_mec)
             consultarMecanico(lista_mec);
             break;
         case 4:
-            removerMecanico(lista_mec);
+            removerMecanico(lista_mec, lista_servico);
             break;
 
         case 5:
@@ -66,7 +66,7 @@ void gerenciarMecanicos(Lista_mecanico *lista_mec)
     } while (opcao != 6);
 }
 
-void gerenciarVeiculos(Lista_veiculo *lista_veiculos)
+void gerenciarVeiculos(Lista_veiculo *lista_veiculos, Lista_servico *lista_servico)
 {
 
     int opcao;
@@ -92,7 +92,7 @@ void gerenciarVeiculos(Lista_veiculo *lista_veiculos)
             break;
 
         case 4:
-            removerVeiculo(lista_veiculos);
+            removerVeiculo(lista_veiculos, lista_servico);
             break;
 
         case 5:
@@ -111,7 +111,7 @@ void gerenciarVeiculos(Lista_veiculo *lista_veiculos)
     } while (opcao != 6);
 }
 
-void gerenciarServicos(Lista_servico *lista_servico)
+void gerenciarServicos(Lista_servico *lista_servico, Lista_mecanico *lista_mec, Lista_veiculo *lista_veiculos)
 {
 
     int opcao;
@@ -125,15 +125,19 @@ void gerenciarServicos(Lista_servico *lista_servico)
         {
 
         case 1:
+            cadastrarServico(lista_servico, lista_mec, lista_veiculos);
             break;
 
         case 2:
+            alterarServico(lista_servico, lista_mec, lista_veiculos);
             break;
 
         case 3:
+            consultarServico(lista_servico);
             break;
 
         case 4:
+            removerServico(lista_servico);
             break;
 
         case 5:

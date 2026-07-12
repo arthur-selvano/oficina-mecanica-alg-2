@@ -1,6 +1,7 @@
 #ifndef CRUD_MECANICO_H
 #define CRUD_MECANICO_H
 
+
 typedef struct
 {
     int id_mecanico;
@@ -9,16 +10,19 @@ typedef struct
     float salario;
 } Mecanico;
 
-typedef struct
+typedef struct Lista_mecanico
 {
     Mecanico *mecanicos;
     int qtd_mec, qtd_max;
 } Lista_mecanico;
 
+typedef struct Lista_servico Lista_servico;
+
+
 void cadastrarMecanico(Lista_mecanico *);
 void alterarMecanico(Lista_mecanico *);
 void consultarMecanico(Lista_mecanico *);
-void removerMecanico(Lista_mecanico *);
+void removerMecanico(Lista_mecanico *, Lista_servico *);
 void listarMecanicos(Lista_mecanico *);
 int existeRegistro(Lista_mecanico *);
 

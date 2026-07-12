@@ -3,6 +3,7 @@
 #include <string.h>
 #include <ctype.h>
 #include "CRUD_veiculo.h"
+#include "funcoes_oficina.h"
 
 // ==================== CRUD VEÍCULOS ====================
 
@@ -136,7 +137,7 @@ void alterarVeiculo(Lista_veiculo *lista_veiculo)
     printf("\nVeiculo alterado com sucesso!\n");
 }
 
-void removerVeiculo(Lista_veiculo *veiculos)
+void removerVeiculo(Lista_veiculo *veiculos, Lista_servico *lista_servico)
 {
     if(!existeRegistroVeiculo(veiculos)){
         return;
@@ -155,6 +156,15 @@ void removerVeiculo(Lista_veiculo *veiculos)
         return;
     }
 
+    for (int i = 0; i < lista_servico->qtd_servicos; i++)
+    {
+        if(strcmp(lista_servico->ordem_servicos[i].placa_veiculo, placa) == 0){
+            printf("Remocao negada, ha registro da placa do veiculo\nem uma ordem de servio\n");
+            return;
+        }
+    }
+    
+    
     for (int i = 0; i < veiculos->qtd_veiculos; i++)
     {
         if (strcmp(veiculos->veiculos[i].placa_veiculo, placa) == 0)
