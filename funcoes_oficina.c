@@ -141,6 +141,7 @@ void gerenciarServicos(Lista_servico *lista_servico, Lista_mecanico *lista_mec, 
             break;
 
         case 5:
+            listarServico(lista_servico, lista_mec, lista_veiculos);
             break;
 
         case 6:

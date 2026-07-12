@@ -22,7 +22,7 @@ void cadastrarVeiculo(Lista_veiculo *lista_veiculo)
     {
         printf("\nPlaca: ");
         scanf("%9s", NovoVeiculo->placa_veiculo);
-        strcpy(NovoVeiculo->placa_veiculo, placaMaiusculo(NovoVeiculo->placa_veiculo));
+        placaMaiusculo(NovoVeiculo->placa_veiculo);
 
         
         if (buscaVeiculoPlaca(lista_veiculo, NovoVeiculo->placa_veiculo) != NULL)
@@ -78,7 +78,7 @@ void consultarVeiculo(Lista_veiculo *lista_veiculo)
 
     printf("\nDigite a placa do veiculo: ");
     scanf("%9s", placa);
-    strcpy(placa, placaMaiusculo(placa));
+    placaMaiusculo(placa);
 
     Veiculo *veiculo = buscaVeiculoPlaca(lista_veiculo, placa);
 
@@ -115,7 +115,7 @@ void alterarVeiculo(Lista_veiculo *lista_veiculo)
 
     printf("\nDigite a placa do veiculo: ");
     scanf("%9s", placa);
-    strcpy(placa, placaMaiusculo(placa));
+    placaMaiusculo(placa);
 
     Veiculo *veiculo = buscaVeiculoPlaca(lista_veiculo, placa);
 
@@ -146,7 +146,7 @@ void removerVeiculo(Lista_veiculo *veiculos, Lista_servico *lista_servico)
 
     printf("\nDigite a placa do veiculo: ");
     scanf("%9s", placa);
-    strcpy(placa, placaMaiusculo(placa));
+    placaMaiusculo(placa);
 
     
 

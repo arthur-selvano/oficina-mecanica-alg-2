@@ -49,7 +49,6 @@ void alterarServico(Lista_servico *lista_servico, Lista_mecanico *lista_mec, Lis
         return;
     }
 
-    Servico->numero_os = validarOS(lista_servico);
     Servico->id_mecanico = validarID(lista_mec);
     validarPlaca(lista_veiculo, Servico->placa_veiculo);
 
@@ -122,7 +121,7 @@ void listarServico(Lista_servico *lista_servico, Lista_mecanico *lista_mec, List
     printf("Escolha uma opcao: ");
     scanf("%d", &opcao);
 
-    int id, encontrado;
+    int id, encontrado = 0;
     char placa[10];
     char data[15];
 
@@ -135,7 +134,7 @@ void listarServico(Lista_servico *lista_servico, Lista_mecanico *lista_mec, List
     case 2:
         printf("\nPlaca do Veiculo: ");
         scanf("%9s", placa);
-        strcpy(placa, placaMaiusculo(placa));
+        placaMaiusculo(placa);
         break;
     case 3:
         printf("\nData do Serviço: ");
@@ -157,10 +156,10 @@ void listarServico(Lista_servico *lista_servico, Lista_mecanico *lista_mec, List
         if((opcao == 1) && (servico->id_mecanico == id)){
             escolha = 1;
         }
-        if((opcao == 2) && (strcmp(lista_servico->ordem_servicos->placa_veiculo, placa) == 0)){
+        if((opcao == 2) && (strcmp(servico->placa_veiculo, placa) == 0)){
             escolha = 1;
         }
-        if((opcao == 3) && (strcmp(lista_servico->ordem_servicos->data_servico, data) == 0)){
+        if((opcao == 3) && (strcmp(servico->data_servico, data) == 0)){
             escolha = 1;
         }
 
@@ -174,7 +173,7 @@ void listarServico(Lista_servico *lista_servico, Lista_mecanico *lista_mec, List
                 return;
             }
 
-            printf("\nNumero OS: %d", servico->id_mecanico);
+            printf("\nNumero OS: %d", servico->numero_os);
             printf("\nData: %s", servico->data_servico);
             printf("\nMecanico: %s", mecanico->nome);
             printf("\nVeiculo: %s", veiculo->modelo);
@@ -243,7 +242,7 @@ void validarPlaca(Lista_veiculo *lista_veiculo, char *endPlaca)
     {
         printf("\nPlaca: ");
         scanf("%9s", endPlaca);
-        strcpy(endPlaca, placaMaiusculo(endPlaca));
+        placaMaiusculo(endPlaca);
 
         if (buscaVeiculoPlaca(lista_veiculo, endPlaca) == NULL)
         {
