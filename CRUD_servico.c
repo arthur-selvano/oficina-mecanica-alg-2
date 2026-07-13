@@ -190,7 +190,7 @@ void listarServico(Lista_servico *lista_servico, Lista_mecanico *lista_mec, List
             printf("\nMecanico: %s", mecanico->nome);
             printf("\nVeiculo: %s", veiculo->modelo);
             printf("\nServico Realizado: %s", servico->servico_realizado);
-            printf("\n-----------------------------------------");
+            printf("\n=================================");
         }
     }
     if (!encontrado)
