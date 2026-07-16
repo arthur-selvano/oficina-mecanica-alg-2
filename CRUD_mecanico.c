@@ -8,15 +8,29 @@
 
 void cadastrarMecanico(Lista_mecanico *lista_mec)
 {
-    Mecanico *NovoMecanico = &lista_mec->mecanicos[lista_mec->qtd_mec];
-
     printf("\n====== CADASTRO DE MECANICO ======\n");
 
     if (lista_mec->qtd_mec >= lista_mec->qtd_max)
     {
-        printf("\nErro: Limite maximo de %d mecanicos atingido!\n", lista_mec->qtd_max);
-        return;
+        int nova_capacidade = lista_mec->qtd_max * 2;
+
+        Mecanico *temporario = realloc(
+            lista_mec->mecanicos,
+            nova_capacidade * sizeof(Mecanico)
+        );
+
+        if (temporario == NULL)
+        {
+            printf("\nErro: memoria insuficiente!\n");
+            return;
+        }
+
+        lista_mec->mecanicos = temporario;
+        lista_mec->qtd_max = nova_capacidade;
     }
+
+    Mecanico *NovoMecanico =
+        &lista_mec->mecanicos[lista_mec->qtd_mec];
 
     do
     {
@@ -25,7 +39,7 @@ void cadastrarMecanico(Lista_mecanico *lista_mec)
 
         if (buscaMecanicoId(lista_mec, NovoMecanico->id_mecanico) != NULL)
         {
-            printf("Atenção esse ID ja existe!\n\n");
+            printf("Atencao: esse ID ja existe!\n\n");
         }
 
     } while (buscaMecanicoId(lista_mec, NovoMecanico->id_mecanico) != NULL);
@@ -39,7 +53,7 @@ void cadastrarMecanico(Lista_mecanico *lista_mec)
     printf("Salario: ");
     scanf("%f", &NovoMecanico->salario);
 
-    (lista_mec->qtd_mec)++;
+    lista_mec->qtd_mec++;
 }
 
 //===========================================================================
