@@ -5,9 +5,9 @@
 int main()
 {
 
-    Lista_mecanico *lista_mecanico = criarListaMecanico(5);
-    Lista_veiculo *lista_veiculo = criarListaVeiculo(5);
-    Lista_servico *lista_servico = criarListaServico(5);
+    Lista_mecanico *lista_mecanico = criarListaMecanico(1);
+    Lista_veiculo *lista_veiculo = criarListaVeiculo(1);
+    Lista_servico *lista_servico = criarListaServico(1);
 
     int opcao;
 
@@ -50,6 +50,5 @@ int main()
     liberarListaVeiculo(lista_veiculo);
     liberarListaServico(lista_servico);
 
-    system("pause");
     return 0;
 }
