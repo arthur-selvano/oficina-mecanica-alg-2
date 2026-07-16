@@ -32,12 +32,7 @@ void cadastrarVeiculo(Lista_veiculo *lista_veiculo)
 
     Veiculo *NovoVeiculo = &lista_veiculo->veiculos[lista_veiculo->qtd_veiculos];
 
-    if (lista_veiculo->qtd_veiculos >= lista_veiculo->qtd_max)
-    {
-        printf("\nLimite de veiculos atingido!\n");
-        return;
-    }
-
+    //remoção do if pois o realloc ja garante espaço disponivel
     do
     {
         printf("\nPlaca: ");
@@ -179,7 +174,7 @@ void removerVeiculo(Lista_veiculo *veiculos, Lista_servico *lista_servico)
     for (int i = 0; i < lista_servico->qtd_servicos; i++)
     {
         if(strcmp(lista_servico->ordem_servicos[i].placa_veiculo, placa) == 0){
-            printf("Remocao negada, ha registro da placa do veiculo\nem uma ordem de servio\n");
+            printf("Remocao negada, ha registro da placa do veiculo\nem uma ordem de servico\n");
             return;
         }
     }
@@ -220,13 +215,21 @@ char* placaMaiusculo(char placa[10]){
 Lista_veiculo *criarListaVeiculo(int tamanho)
 {
     Lista_veiculo *lista_veiculo = malloc(sizeof(Lista_veiculo));
+//conferindo validando;
+    if(lista_veiculo == NULL){
+        printf("\nErro: Memoria insulficiente\n");
+        return NULL;
+    }
+
     lista_veiculo->qtd_veiculos = 0;
     lista_veiculo->qtd_max = tamanho;
+
     lista_veiculo->veiculos = malloc(tamanho * sizeof(Veiculo));
 
-    if (lista_veiculo == NULL)
-    {
+    if (lista_veiculo->veiculos == NULL)
+    {//conferindo validando;
         printf("\nMemoria insuficiente!\n");
+        free(lista_veiculo);
         return NULL;
     }
     return lista_veiculo;
@@ -234,6 +237,10 @@ Lista_veiculo *criarListaVeiculo(int tamanho)
 
 void liberarListaVeiculo(Lista_veiculo *lista_veiculo)
 {
-    free(lista_veiculo->veiculos);
-    free(lista_veiculo);
+    //if de segurança conferindo;
+    if(lista_veiculo != NULL){
+        free(lista_veiculo->veiculos);
+        free(lista_veiculo);
+    }
+    
 }

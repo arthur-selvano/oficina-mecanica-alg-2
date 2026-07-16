@@ -30,12 +30,6 @@ void cadastrarServico(Lista_servico *lista_servico, Lista_mecanico *lista_mec, L
 
     printf("\n====== CADASTRO DE OD. SERVICO ======\n");
 
-    if (lista_servico->qtd_servicos == lista_servico->qtd_max)
-    {
-        printf("\nLimite de OD. Servico atingido!\n");
-        return;
-    }
-
     NovoServico->id_mecanico = validarID(lista_mec);
     validarPlaca(lista_veiculo, NovoServico->placa_veiculo);
     NovoServico->numero_os = validarOS(lista_servico);
@@ -100,8 +94,9 @@ void removerServico(Lista_servico *lista_servico)
     for (int i = 0; i < lista_servico->qtd_servicos; i++)
     {
         if (lista_servico->ordem_servicos[i].numero_os == os)
-        {
-            for (int j = 0; j < lista_servico->qtd_servicos - 1; j++)
+        { 
+            //correção ARTHUR F; j=0 para j=i:
+            for (int j = i; j < lista_servico->qtd_servicos - 1; j++)
             {
                 lista_servico->ordem_servicos[j] = lista_servico->ordem_servicos[j + 1];
             }
@@ -206,8 +201,18 @@ void listarServico(Lista_servico *lista_servico, Lista_mecanico *lista_mec, List
 
             printf("\nNumero OS: %d", servico->numero_os);
             printf("\nData: %s", servico->data_servico);
-            printf("\nMecanico: %s", mecanico->nome);
-            printf("\nVeiculo: %s", veiculo->modelo);
+            //Correção: Arthur F: Verificação se o veiculo ou mecanico existe.
+            if(mecanico != NULL){
+                printf("\nMecanico: %s", mecanico->nome);
+            }else{
+                printf("\n Mecanico: [Não encontrado ou Removido]\n");
+            }
+            if(veiculo != NULL){
+                printf("\nVeiculo: %s", veiculo->modelo);
+            }else{
+                printf("\n Veiculo : [não encontrado ou Removido]\n");
+            }
+
             printf("\nServico Realizado: %s", servico->servico_realizado);
             printf("\n=================================");
         }
@@ -325,20 +330,31 @@ int validarOS(Lista_servico *lista_servico)
 Lista_servico *criarListaServico(int tamanho)
 {
     Lista_servico *lista_servico = malloc(sizeof(Lista_servico));
+
+    if(lista_servico == NULL){
+
+        printf("\n Erro: Memoria insuficiente para Criar lista de servicos\n");
+        return NULL;
+    }
+
     lista_servico->qtd_servicos = 0;
     lista_servico->qtd_max = tamanho;
+
     lista_servico->ordem_servicos = malloc(tamanho * sizeof(Ordem_servico));
 
-    if (lista_servico == NULL)
+    if (lista_servico->ordem_servicos == NULL)
     {
         printf("\nMemoria insuficiente!\n");
+        free(lista_servico);
         return NULL;
     }
     return lista_servico;
 }
 
-void liberarListaServico(Lista_servico *lista_servico)
-{
+void liberarListaServico(Lista_servico *lista_servico){
+
+    if(lista_servico != NULL){
     free(lista_servico->ordem_servicos);
     free(lista_servico);
+    }
 }

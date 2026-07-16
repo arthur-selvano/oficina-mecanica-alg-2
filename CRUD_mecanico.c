@@ -8,29 +8,16 @@
 
 void cadastrarMecanico(Lista_mecanico *lista_mec)
 {
+
     printf("\n====== CADASTRO DE MECANICO ======\n");
 
     if (lista_mec->qtd_mec >= lista_mec->qtd_max)
     {
-        int nova_capacidade = lista_mec->qtd_max * 2;
-
-        Mecanico *temporario = realloc(
-            lista_mec->mecanicos,
-            nova_capacidade * sizeof(Mecanico)
-        );
-
-        if (temporario == NULL)
-        {
-            printf("\nErro: memoria insuficiente!\n");
-            return;
-        }
-
-        lista_mec->mecanicos = temporario;
-        lista_mec->qtd_max = nova_capacidade;
+        printf("\nErro: Limite maximo de %d mecanicos atingido!\n", lista_mec->qtd_max);
+        return;
     }
 
-    Mecanico *NovoMecanico =
-        &lista_mec->mecanicos[lista_mec->qtd_mec];
+    Mecanico *NovoMecanico = &lista_mec->mecanicos[lista_mec->qtd_mec];
 
     do
     {
@@ -39,7 +26,7 @@ void cadastrarMecanico(Lista_mecanico *lista_mec)
 
         if (buscaMecanicoId(lista_mec, NovoMecanico->id_mecanico) != NULL)
         {
-            printf("Atencao: esse ID ja existe!\n\n");
+            printf("Atenção esse ID ja existe!\n\n");
         }
 
     } while (buscaMecanicoId(lista_mec, NovoMecanico->id_mecanico) != NULL);
@@ -53,7 +40,7 @@ void cadastrarMecanico(Lista_mecanico *lista_mec)
     printf("Salario: ");
     scanf("%f", &NovoMecanico->salario);
 
-    lista_mec->qtd_mec++;
+    (lista_mec->qtd_mec)++;
 }
 
 //===========================================================================
@@ -220,6 +207,7 @@ int existeRegistro(Lista_mecanico *lista_mec){
 
 Lista_mecanico *criarListaMecanico(int tamanho)
 {
+
     Lista_mecanico *lista_mec = malloc(sizeof(Lista_mecanico));
 
     if (lista_mec == NULL)
@@ -227,15 +215,12 @@ Lista_mecanico *criarListaMecanico(int tamanho)
         printf("\nMemoria insuficiente!\n");
         return NULL;
     }
-
     lista_mec->qtd_mec = 0;
     lista_mec->qtd_max = tamanho;
-
     lista_mec->mecanicos = malloc(tamanho * sizeof(Mecanico));
 
-    if (lista_mec->mecanicos == NULL)
-    {
-        printf("\nMemoria insuficiente!\n");
+    if(lista_mec-> mecanicos == NULL){
+        printf("\nMemoria Insuficiente!\n");
         free(lista_mec);
         return NULL;
     }
@@ -246,6 +231,10 @@ Lista_mecanico *criarListaMecanico(int tamanho)
 
 void liberarListaMecanico(Lista_mecanico *lista_mec)
 {
+    if(lista_mec != NULL){
+        
     free(lista_mec->mecanicos);
     free(lista_mec);
+
+    }
 }
