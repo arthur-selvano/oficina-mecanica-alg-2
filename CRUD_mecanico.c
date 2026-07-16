@@ -221,15 +221,25 @@ int existeRegistro(Lista_mecanico *lista_mec){
 Lista_mecanico *criarListaMecanico(int tamanho)
 {
     Lista_mecanico *lista_mec = malloc(sizeof(Lista_mecanico));
-    lista_mec->qtd_mec = 0;
-    lista_mec->qtd_max = tamanho;
-    lista_mec->mecanicos = malloc(tamanho * sizeof(Mecanico));
 
     if (lista_mec == NULL)
     {
         printf("\nMemoria insuficiente!\n");
         return NULL;
     }
+
+    lista_mec->qtd_mec = 0;
+    lista_mec->qtd_max = tamanho;
+
+    lista_mec->mecanicos = malloc(tamanho * sizeof(Mecanico));
+
+    if (lista_mec->mecanicos == NULL)
+    {
+        printf("\nMemoria insuficiente!\n");
+        free(lista_mec);
+        return NULL;
+    }
+
     return lista_mec;
 }
 
