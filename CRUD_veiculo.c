@@ -10,6 +10,26 @@
 void cadastrarVeiculo(Lista_veiculo *lista_veiculo)
 {
 
+    if (lista_veiculo->qtd_veiculos >= lista_veiculo->qtd_max)
+    {
+        int nova_capacidade = lista_veiculo->qtd_max * 2;
+
+        Veiculo *temporario = realloc(
+            lista_veiculo->veiculos,
+            nova_capacidade * sizeof(Veiculo)
+        );
+
+        if (temporario == NULL)
+        {
+            printf("\nErro: memoria insuficiente!\n");
+            return;
+        }
+
+        lista_veiculo->veiculos = temporario;
+        lista_veiculo->qtd_max = nova_capacidade;
+    }
+
+
     Veiculo *NovoVeiculo = &lista_veiculo->veiculos[lista_veiculo->qtd_veiculos];
 
     if (lista_veiculo->qtd_veiculos >= lista_veiculo->qtd_max)
