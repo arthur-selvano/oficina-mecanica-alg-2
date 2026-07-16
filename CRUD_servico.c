@@ -7,6 +7,25 @@
 void cadastrarServico(Lista_servico *lista_servico, Lista_mecanico *lista_mec, Lista_veiculo *lista_veiculo)
 {
 
+    if (lista_servico->qtd_servicos >= lista_servico->qtd_max)
+    {
+        int nova_capacidade = lista_servico->qtd_max * 2;
+
+        Ordem_servico *temporario = realloc(
+            lista_servico->ordem_servicos,
+            nova_capacidade * sizeof(Ordem_servico)
+        );
+
+        if (temporario == NULL)
+        {
+            printf("\nErro: memoria insuficiente!\n");
+            return;
+        }
+
+        lista_servico->ordem_servicos = temporario;
+        lista_servico->qtd_max = nova_capacidade;
+    }
+
     Ordem_servico *NovoServico = &lista_servico->ordem_servicos[lista_servico->qtd_servicos];
 
     printf("\n====== CADASTRO DE OD. SERVICO ======\n");
