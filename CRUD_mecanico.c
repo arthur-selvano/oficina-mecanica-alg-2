@@ -11,10 +11,19 @@ void cadastrarMecanico(Lista_mecanico *lista_mec)
 
     printf("\n====== CADASTRO DE MECANICO ======\n");
 
-    if (lista_mec->qtd_mec >= lista_mec->qtd_max)
+    if (lista_mec->qtd_mec >= lista_mec->qtd_max)//checa se a lista esta cheia
     {
-        printf("\nErro: Limite maximo de %d mecanicos atingido!\n", lista_mec->qtd_max);
-        return;
+        int nova_capacidade = lista_mec->qtd_max+5;//se estiver cheia ele calcula um novo limite com +5 vagas
+        Mecanico *temporario = realloc(lista_mec->mecanicos,nova_capacidade*sizeof(Mecanico));//realoca para mais 5;
+
+        if(temporario == NULL){
+            printf("\nMemoria insulficiente!\n");
+            return;
+        }
+
+        lista_mec->mecanicos = temporario;
+        lista_mec ->qtd_max = nova_capacidade;//Atualizando
+        printf("\n Limite atingido. Capacidade de mecanicos aumentada para: %d\n", lista_mec->qtd_max);
     }
 
     Mecanico *NovoMecanico = &lista_mec->mecanicos[lista_mec->qtd_mec];
@@ -141,15 +150,24 @@ void removerMecanico(Lista_mecanico *lista_mec, Lista_servico *lista_servico)
     
     for (int i = 0; i < *qtd; i++)
     {
-        if (lista_mec->mecanicos[i].id_mecanico == id)
-        {
+        if (lista_mec->mecanicos[i].id_mecanico == id){
 
-            for (int j = i; j < (*qtd - 1); j++)
-            {
+            for (int j = i; j < (*qtd - 1); j++){
                 lista_mec->mecanicos[j] = lista_mec->mecanicos[j + 1];
             }
             (*qtd)--;
             printf("\nMecanico removido com sucesso!\n");
+
+            int espacos_livres = lista_mec->qtd_max - lista_mec->qtd_mec;
+            if(espacos_livres >5){
+                int nova_capacidade = lista_mec->qtd_mec + 5;
+                Mecanico *temporario = realloc(lista_mec->mecanicos, nova_capacidade *sizeof(Mecanico));
+                if(temporario != NULL){
+                    lista_mec->mecanicos = temporario;
+                    lista_mec->qtd_max = nova_capacidade;
+                    printf("Memoria otimizada. Nova capacidade de mecanicos: %d\n", lista_mec->qtd_max);
+                }
+            }
             return;
         }
     }

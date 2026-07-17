@@ -10,9 +10,9 @@
 void cadastrarVeiculo(Lista_veiculo *lista_veiculo)
 {
 
-    if (lista_veiculo->qtd_veiculos >= lista_veiculo->qtd_max)
-    {
-        int nova_capacidade = lista_veiculo->qtd_max * 2;
+    if (lista_veiculo->qtd_veiculos >= lista_veiculo->qtd_max){
+
+        int nova_capacidade = lista_veiculo->qtd_max + 5;
 
         Veiculo *temporario = realloc(
             lista_veiculo->veiculos,
@@ -27,6 +27,7 @@ void cadastrarVeiculo(Lista_veiculo *lista_veiculo)
 
         lista_veiculo->veiculos = temporario;
         lista_veiculo->qtd_max = nova_capacidade;
+        printf("\nlimite atingido. Capacidade de veiculos aumentada para: %d\n", lista_veiculo->qtd_max);
     }
 
 
@@ -171,8 +172,7 @@ void removerVeiculo(Lista_veiculo *veiculos, Lista_servico *lista_servico)
         return;
     }
 
-    for (int i = 0; i < lista_servico->qtd_servicos; i++)
-    {
+    for (int i = 0; i < lista_servico->qtd_servicos; i++){
         if(strcmp(lista_servico->ordem_servicos[i].placa_veiculo, placa) == 0){
             printf("Remocao negada, ha registro da placa do veiculo\nem uma ordem de servico\n");
             return;
@@ -190,6 +190,19 @@ void removerVeiculo(Lista_veiculo *veiculos, Lista_servico *lista_servico)
             }
             (veiculos->qtd_veiculos)--;
             printf("\nVeiculo removido com sucesso!\n");
+            
+            int espacos_livres = veiculos->qtd_max - veiculos->qtd_veiculos;
+            if(espacos_livres >5){
+                int nova_capacidade = veiculos->qtd_veiculos + 5;
+
+                Veiculo *temporario = realloc(veiculos->veiculos, nova_capacidade*sizeof(Veiculo));
+                
+                if(temporario != NULL){
+                    veiculos->veiculos = temporario;
+                    veiculos->qtd_max = nova_capacidade;
+                    printf("Memoria otimizada. Nova capacidade de veiculos: %d\n", veiculos->qtd_max);
+                }
+            }
             return;
         }
     }

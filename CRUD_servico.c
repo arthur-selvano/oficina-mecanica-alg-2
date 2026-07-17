@@ -9,7 +9,7 @@ void cadastrarServico(Lista_servico *lista_servico, Lista_mecanico *lista_mec, L
 
     if (lista_servico->qtd_servicos >= lista_servico->qtd_max)
     {
-        int nova_capacidade = lista_servico->qtd_max * 2;
+        int nova_capacidade = lista_servico->qtd_max + 5;
 
         Ordem_servico *temporario = realloc(
             lista_servico->ordem_servicos,
@@ -24,6 +24,7 @@ void cadastrarServico(Lista_servico *lista_servico, Lista_mecanico *lista_mec, L
 
         lista_servico->ordem_servicos = temporario;
         lista_servico->qtd_max = nova_capacidade;
+        printf("\nLimite atingido. Capacidade de servicos aumentada para: %d\n", lista_servico->qtd_max);
     }
 
     Ordem_servico *NovoServico = &lista_servico->ordem_servicos[lista_servico->qtd_servicos];
@@ -96,13 +97,29 @@ void removerServico(Lista_servico *lista_servico)
         if (lista_servico->ordem_servicos[i].numero_os == os)
         { 
             //correção ARTHUR F; j=0 para j=i:
-            for (int j = i; j < lista_servico->qtd_servicos - 1; j++)
-            {
+            for (int j = i; j < lista_servico->qtd_servicos - 1; j++){
                 lista_servico->ordem_servicos[j] = lista_servico->ordem_servicos[j + 1];
             }
+
             (lista_servico->qtd_servicos)--;
             printf("\nOrdem de servico removida com sucesso!\n");
-            return;
+
+            int espacos_livres = lista_servico->qtd_max - lista_servico->qtd_servicos;
+            if(espacos_livres > 5){
+                
+                int nova_capacidade =lista_servico->qtd_servicos+5;
+                Ordem_servico *temporario =realloc(lista_servico->ordem_servicos,nova_capacidade*sizeof(Ordem_servico));
+
+                if(temporario != NULL){
+                    lista_servico->ordem_servicos= temporario;
+                    lista_servico -> qtd_max = nova_capacidade;
+                    printf("Memoria Otimizada. Nova capacidade de servicos: %d\n", lista_servico->qtd_max);
+
+                }
+
+            }
+        return;
+
         }
     }
 }
