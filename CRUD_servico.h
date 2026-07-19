@@ -29,6 +29,7 @@ void printServico(Ordem_servico *);
 int validarID(Lista_mecanico *);
 void validarPlaca(Lista_veiculo *, char *);
 int validarOS(Lista_servico *);
+int existeRegistroServico(Lista_servico *);
 Ordem_servico *buscaOS(Lista_servico *, int);
 
 Lista_servico *criarListaServico(int);

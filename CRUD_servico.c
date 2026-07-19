@@ -7,6 +7,15 @@
 void cadastrarServico(Lista_servico *lista_servico, Lista_mecanico *lista_mec, Lista_veiculo *lista_veiculo)
 {
 
+    if (!existeRegistro(lista_mec))
+    {
+        return;
+    }
+    if (!existeRegistroVeiculo(lista_veiculo))
+    {
+        return;
+    }
+
     if (lista_servico->qtd_servicos >= lista_servico->qtd_max)
     {
         int nova_capacidade = lista_servico->qtd_max + 5;
@@ -48,6 +57,10 @@ void cadastrarServico(Lista_servico *lista_servico, Lista_mecanico *lista_mec, L
 
 void alterarServico(Lista_servico *lista_servico, Lista_mecanico *lista_mec, Lista_veiculo *lista_veiculo)
 {
+    if (!existeRegistroServico(lista_servico))
+    {
+        return;
+    }
 
     int os;
 
@@ -77,6 +90,10 @@ void alterarServico(Lista_servico *lista_servico, Lista_mecanico *lista_mec, Lis
 
 void removerServico(Lista_servico *lista_servico)
 {
+    if (!existeRegistroServico(lista_servico))
+    {
+        return;
+    }
 
     int os;
 
@@ -123,6 +140,10 @@ void removerServico(Lista_servico *lista_servico)
 
 void consultarServico(Lista_servico *lista_servico)
 {
+    if (!existeRegistroServico(lista_servico))
+    {
+        return;
+    }
 
     int os;
 
@@ -141,9 +162,8 @@ void consultarServico(Lista_servico *lista_servico)
 
 void listarServico(Lista_servico *lista_servico, Lista_mecanico *lista_mec, Lista_veiculo *lista_veiculo)
 {
-    if (lista_servico->qtd_servicos == 0)
+    if (!existeRegistroServico(lista_servico))
     {
-        printf("\nNao ha ordens de servicos!\n");
         return;
     }
 
@@ -252,6 +272,16 @@ void printServico(Ordem_servico *servico)
     printf("\nData do Servico: %s", servico->data_servico);
     printf("\nServico Realizado: %s", servico->servico_realizado);
     printf("\nValor Total: R$%.2f", servico->valor_total);
+}
+
+int existeRegistroServico(Lista_servico *lista_servico)
+{
+    if (lista_servico->qtd_servicos == 0)
+    {
+        printf("\nNenhum servico cadastrado.\n");
+        return 0;
+    }
+    return 1;
 }
 
 Ordem_servico *buscaOS(Lista_servico *lista_servico, int os)
