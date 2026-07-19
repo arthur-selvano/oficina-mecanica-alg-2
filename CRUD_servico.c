@@ -11,10 +11,7 @@ void cadastrarServico(Lista_servico *lista_servico, Lista_mecanico *lista_mec, L
     {
         int nova_capacidade = lista_servico->qtd_max + 5;
 
-        Ordem_servico *temporario = realloc(
-            lista_servico->ordem_servicos,
-            nova_capacidade * sizeof(Ordem_servico)
-        );
+        Ordem_servico *temporario = realloc(lista_servico->ordem_servicos, nova_capacidade * sizeof(Ordem_servico));
 
         if (temporario == NULL)
         {
@@ -95,9 +92,10 @@ void removerServico(Lista_servico *lista_servico)
     for (int i = 0; i < lista_servico->qtd_servicos; i++)
     {
         if (lista_servico->ordem_servicos[i].numero_os == os)
-        { 
-            //correção ARTHUR F; j=0 para j=i:
-            for (int j = i; j < lista_servico->qtd_servicos - 1; j++){
+        {
+            // correção ARTHUR F; j=0 para j=i:
+            for (int j = i; j < lista_servico->qtd_servicos - 1; j++)
+            {
                 lista_servico->ordem_servicos[j] = lista_servico->ordem_servicos[j + 1];
             }
 
@@ -105,21 +103,20 @@ void removerServico(Lista_servico *lista_servico)
             printf("\nOrdem de servico removida com sucesso!\n");
 
             int espacos_livres = lista_servico->qtd_max - lista_servico->qtd_servicos;
-            if(espacos_livres > 5){
-                
-                int nova_capacidade =lista_servico->qtd_servicos+5;
-                Ordem_servico *temporario =realloc(lista_servico->ordem_servicos,nova_capacidade*sizeof(Ordem_servico));
+            if (espacos_livres > 5)
+            {
 
-                if(temporario != NULL){
-                    lista_servico->ordem_servicos= temporario;
-                    lista_servico -> qtd_max = nova_capacidade;
+                int nova_capacidade = lista_servico->qtd_max - 5;
+                Ordem_servico *temporario = realloc(lista_servico->ordem_servicos, nova_capacidade * sizeof(Ordem_servico));
+
+                if (temporario != NULL)
+                {
+                    lista_servico->ordem_servicos = temporario;
+                    lista_servico->qtd_max = nova_capacidade;
                     printf("Memoria Otimizada. Nova capacidade de servicos: %d\n", lista_servico->qtd_max);
-
                 }
-
             }
-        return;
-
+            return;
         }
     }
 }
@@ -218,15 +215,21 @@ void listarServico(Lista_servico *lista_servico, Lista_mecanico *lista_mec, List
 
             printf("\nNumero OS: %d", servico->numero_os);
             printf("\nData: %s", servico->data_servico);
-            //Correção: Arthur F: Verificação se o veiculo ou mecanico existe.
-            if(mecanico != NULL){
+            // Correção: Arthur F: Verificação se o veiculo ou mecanico existe.
+            if (mecanico != NULL)
+            {
                 printf("\nMecanico: %s", mecanico->nome);
-            }else{
+            }
+            else
+            {
                 printf("\n Mecanico: [Não encontrado ou Removido]\n");
             }
-            if(veiculo != NULL){
+            if (veiculo != NULL)
+            {
                 printf("\nVeiculo: %s", veiculo->modelo);
-            }else{
+            }
+            else
+            {
                 printf("\n Veiculo : [não encontrado ou Removido]\n");
             }
 
@@ -348,7 +351,8 @@ Lista_servico *criarListaServico(int tamanho)
 {
     Lista_servico *lista_servico = malloc(sizeof(Lista_servico));
 
-    if(lista_servico == NULL){
+    if (lista_servico == NULL)
+    {
 
         printf("\n Erro: Memoria insuficiente para Criar lista de servicos\n");
         return NULL;
@@ -368,10 +372,12 @@ Lista_servico *criarListaServico(int tamanho)
     return lista_servico;
 }
 
-void liberarListaServico(Lista_servico *lista_servico){
+void liberarListaServico(Lista_servico *lista_servico)
+{
 
-    if(lista_servico != NULL){
-    free(lista_servico->ordem_servicos);
-    free(lista_servico);
+    if (lista_servico != NULL)
+    {
+        free(lista_servico->ordem_servicos);
+        free(lista_servico);
     }
 }

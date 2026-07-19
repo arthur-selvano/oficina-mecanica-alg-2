@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include "funcoes_oficina.h"
 
-
 int switch_case_crud(char tipo[])
 {
     int opcao;
@@ -19,7 +18,15 @@ int switch_case_crud(char tipo[])
     printf("===================================================\n");
     printf("| | | | | | | |  ESCOLHA UMA OPCAO  | | | | | | | |\n\n");
     printf("Escolha: ");
-    scanf("%d", &opcao);
+    if (scanf("%d", &opcao) != 1)
+    {
+        opcao = -1; // Se digitar letra, força -1 para cair no default do switch de quem chamou
+    }
+
+    // Limpa o buffer do teclado para eliminar as letras ou o 'Enter'
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF);
+
     return opcao;
 }
 
@@ -155,4 +162,3 @@ void gerenciarServicos(Lista_servico *lista_servico, Lista_mecanico *lista_mec, 
 
     } while (opcao != 6);
 }
-
