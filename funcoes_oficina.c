@@ -221,3 +221,78 @@ void carregarDadosOficina(Lista_mecanico *lista_mec, Lista_veiculo *lista_veicul
     fclose(arquivo);
     printf("\nDados da oficina carregados com sucesso!\n");
 }
+
+void gerarRelatorioTxt(Lista_mecanico *lista_mec, Lista_veiculo *lista_veiculo, Lista_servico *lista_servico)
+{
+    FILE *arquivo = fopen("relatorio_oficina.txt", "w");
+    
+    if (arquivo == NULL)
+    {
+        printf("\nErro ao criar o relatorio!\n");
+        return;
+    }
+
+    // Cabeçalho Principal
+    fprintf(arquivo, "===========================================================================\n");
+    fprintf(arquivo, "                        RELATORIO GERAL DA OFICINA\n");
+    fprintf(arquivo, "===========================================================================\n\n");
+
+    // ----- IMPRIMINDO MECÂNICOS -----
+    fprintf(arquivo, " MECANICOS CADASTRADOS\n");
+    fprintf(arquivo, "---------------------------------------------------------------------------\n");
+    fprintf(arquivo, "| %-4s | %-22s | %-20s | %-15s |\n", "ID", "Nome", "Especialidade", "Salario");
+    fprintf(arquivo, "---------------------------------------------------------------------------\n");
+    if (lista_mec->qtd_mec == 0) {
+        fprintf(arquivo, "| %-71s |\n", "Nenhum mecanico cadastrado.");
+    } else {
+        for (int i = 0; i < lista_mec->qtd_mec; i++) {
+            fprintf(arquivo, "| %-4d | %-22s | %-20s | R$ %-12.2f |\n",
+                    lista_mec->mecanicos[i].id_mecanico,
+                    lista_mec->mecanicos[i].nome,
+                    lista_mec->mecanicos[i].especialidade,
+                    lista_mec->mecanicos[i].salario);
+        }
+    }
+    fprintf(arquivo, "---------------------------------------------------------------------------\n\n");
+
+    // ----- IMPRIMINDO VEÍCULOS -----
+    fprintf(arquivo, " VEICULOS CADASTRADOS\n");
+    fprintf(arquivo, "---------------------------------------------------------------------------\n");
+    fprintf(arquivo, "| %-10s | %-20s | %-6s | %-21s |\n", "Placa", "Modelo", "Ano", "Contato");
+    fprintf(arquivo, "---------------------------------------------------------------------------\n");
+    if (lista_veiculo->qtd_veiculos == 0) {
+        fprintf(arquivo, "| %-71s |\n", "Nenhum veiculo cadastrado.");
+    } else {
+        for (int i = 0; i < lista_veiculo->qtd_veiculos; i++) {
+            fprintf(arquivo, "| %-10s | %-20s | %-6d | %-21s |\n",
+                    lista_veiculo->veiculos[i].placa_veiculo,
+                    lista_veiculo->veiculos[i].modelo,
+                    lista_veiculo->veiculos[i].ano,
+                    lista_veiculo->veiculos[i].telefone_dono);
+        }
+    }
+    fprintf(arquivo, "---------------------------------------------------------------------------\n\n");
+
+    // ----- IMPRIMINDO SERVIÇOS -----
+    fprintf(arquivo, " ORDENS DE SERVICO\n");
+    fprintf(arquivo, "-------------------------------------------------------------------------------------------\n");
+    fprintf(arquivo, "| %-4s | %-12s | %-4s | %-10s | %-25s | %-15s |\n", "OS", "Data", "Mec.", "Placa", "Servico", "Valor");
+    fprintf(arquivo, "-------------------------------------------------------------------------------------------\n");
+    if (lista_servico->qtd_servicos == 0) {
+        fprintf(arquivo, "| %-87s |\n", "Nenhuma ordem de servico cadastrada.");
+    } else {
+        for (int i = 0; i < lista_servico->qtd_servicos; i++) {
+            fprintf(arquivo, "| %-4d | %-12s | %-4d | %-10s | %-25s | R$ %-12.2f |\n",
+                    lista_servico->ordem_servicos[i].numero_os,
+                    lista_servico->ordem_servicos[i].data_servico,
+                    lista_servico->ordem_servicos[i].id_mecanico,
+                    lista_servico->ordem_servicos[i].placa_veiculo,
+                    lista_servico->ordem_servicos[i].servico_realizado,
+                    lista_servico->ordem_servicos[i].valor_total);
+        }
+    }
+    fprintf(arquivo, "-------------------------------------------------------------------------------------------\n");
+
+    fclose(arquivo);
+    printf("\nRelatorio 'relatorio_oficina.txt' gerado com sucesso com tabelas formatadas!\n");
+}

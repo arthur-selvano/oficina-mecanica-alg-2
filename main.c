@@ -22,7 +22,8 @@ int main()
         printf("             1 - Gerenciar Mecanicos.               \n");
         printf("             2 - Gerenciar Veiculos.                \n");
         printf("             3 - Gerenciar Ordem de Servico.        \n");
-        printf("             4 - Sair...                            \n");
+        printf("             4 - Gerar Relatorio em TXT.            \n"); 
+        printf("             5 - Sair...                            \n");
         printf("===================================================\n");
         printf("| | | | | | | |  ESCOLHA UMA OPCAO  | | | | | | | |\n\n");
         printf("Escolha: ");
@@ -47,6 +48,9 @@ int main()
             gerenciarServicos(lista_servico, lista_mecanico, lista_veiculo);
             break;
         case 4:
+            gerarRelatorioTxt(lista_mecanico, lista_veiculo, lista_servico); 
+            break;
+        case 5:
             printf("\n| | | | | | | |   SISTEMA FECHADO   | | | | | | | |\n\n\n\n\n");
             break;
         default:
@@ -54,7 +58,7 @@ int main()
             break;
         }
 
-    } while (opcao != 4);
+    } while (opcao != 5); 
 
     salvarDadosOficina(lista_mecanico, lista_veiculo, lista_servico, "dados_oficina.bin");
 
