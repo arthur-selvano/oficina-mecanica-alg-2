@@ -9,27 +9,9 @@ int main()
     Lista_veiculo *lista_veiculo = criarListaVeiculo(5);
     Lista_servico *lista_servico = criarListaServico(5);
 
-    int opcao, carregar, salvar;
-    do
-    {
-        printf("\n===================================================\n");
-        printf("           Carregar dados\n");
-        printf("===================================================\n");
-        printf("             1 - Sim.               \n");
-        printf("             2 - Nao.                \n");
-        printf("===================================================\n");
-        printf("| | | | | | | |  ESCOLHA UMA OPCAO  | | | | | | | |\n\n");
-        printf("Escolha: ");
-        if (scanf("%d", &carregar) != 1) // scanf quando consegue ler, retorna 1, quando nao, diferente de 1
-        {
-            carregar = -1; // Forçamos um valor inválido para cair no default do switch
-        }
+    int opcao;
 
-    } while (carregar != 1 && carregar != 2);
-    if (carregar == 1)
-    {
-        carregarMecanicos(lista_mecanico, "mecanicos.dat");
-    }
+    carregarMecanicos(lista_mecanico, "mecanicos.dat");
 
     do
     {
@@ -51,8 +33,7 @@ int main()
 
         // 2. Limpamos o buffer imediatamente para o lixo de letras não rodar nos próximos menus
         int c;
-        while ((c = getchar()) != '\n' && c != EOF)
-            ;
+        while ((c = getchar()) != '\n' && c != EOF);
 
         switch (opcao)
         {
@@ -75,27 +56,7 @@ int main()
 
     } while (opcao != 4);
 
-     do
-    {
-        printf("\n===================================================\n");
-        printf("           Salvar dados\n");
-        printf("===================================================\n");
-        printf("             1 - Sim.               \n");
-        printf("             2 - Nao.                \n");
-        printf("===================================================\n");
-        printf("| | | | | | | |  ESCOLHA UMA OPCAO  | | | | | | | |\n\n");
-        printf("Escolha: ");
-        if (scanf("%d", &salvar) != 1) // scanf quando consegue ler, retorna 1, quando nao, diferente de 1
-        {
-            salvar = -1; // Forçamos um valor inválido para cair no default do switch
-        }
-
-    } while (salvar != 1 && salvar != 2);
-    if (salvar == 1)
-    {
-        salvarMecanicos(lista_mecanico, "mecanicos.dat");
-    }
-
+    salvarMecanicos(lista_mecanico, "mecanicos.dat");
 
     liberarListaMecanico(lista_mecanico);
     liberarListaVeiculo(lista_veiculo);

@@ -32,7 +32,12 @@ void cadastrarMecanico(Lista_mecanico *lista_mec)
     do
     {
         printf("ID: ");
-        scanf("%d", &NovoMecanico->id_mecanico);
+        while (scanf("%d", &NovoMecanico->id_mecanico) != 1)
+        {
+            printf("ID invalido! Por favor, digite apenas numeros: ");
+            int c;
+            while ((c = getchar()) != '\n' && c != EOF);
+        }
 
         if (buscaMecanicoId(lista_mec, NovoMecanico->id_mecanico) != NULL)
         {
@@ -48,7 +53,18 @@ void cadastrarMecanico(Lista_mecanico *lista_mec)
     scanf(" %[^\n]", NovoMecanico->especialidade);
 
     printf("Salario: ");
-    scanf("%f", &NovoMecanico->salario);
+    while (scanf("%f", &NovoMecanico->salario) != 1)
+    {
+        printf("Valor invalido! Por favor, digite apenas numeros para o salario: ");
+        
+        // Limpa o lixo (letras) do buffer do teclado
+        int c;
+        while ((c = getchar()) != '\n' && c != EOF);
+    }
+    
+    // Limpa o 'Enter' final para não atrapalhar futuras leituras
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF);
 
     (lista_mec->qtd_mec)++;
 }
@@ -67,7 +83,12 @@ void alterarMecanico(Lista_mecanico *lista_mec)
 
     printf("\n====== ALTERAR MECANICO ======\n");
     printf("Digite o ID do mecanico: ");
-    scanf("%d", &id);
+    while (scanf("%d", &id) != 1)
+    {
+        printf("ID invalido! Por favor, digite apenas numeros: ");
+        int c;
+        while ((c = getchar()) != '\n' && c != EOF);
+    }
 
     Mecanico *mecanico = buscaMecanicoId(lista_mec, id);
 
@@ -86,7 +107,16 @@ void alterarMecanico(Lista_mecanico *lista_mec)
     scanf(" %[^\n]", mecanico->especialidade);
 
     printf("Novo salario: ");
-    scanf("%f", &mecanico->salario);
+    while (scanf("%f", &mecanico->salario) != 1)
+    {
+        printf("Valor invalido! Por favor, digite apenas numeros para o salario: ");
+        
+        int c;
+        while ((c = getchar()) != '\n' && c != EOF);
+    }
+    
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF);
 
     printf("\nAtualizado com sucesso!\n");
     return;
@@ -104,7 +134,12 @@ void consultarMecanico(Lista_mecanico *lista_mec)
     int id;
 
     printf("Digite o ID do mecanico: ");
-    scanf("%d", &id);
+    while (scanf("%d", &id) != 1)
+    {
+        printf("ID invalido! Por favor, digite apenas numeros: ");
+        int c;
+        while ((c = getchar()) != '\n' && c != EOF);
+    }
 
     Mecanico *mecanico = buscaMecanicoId(lista_mec, id);
 
@@ -133,7 +168,12 @@ void removerMecanico(Lista_mecanico *lista_mec, Lista_servico *lista_servico)
 
     printf("\n====== REMOVER MECANICO ======\n");
     printf("Digite o ID do mecanico: ");
-    scanf("%d", &id);
+    while (scanf("%d", &id) != 1)
+    {
+        printf("ID invalido! Por favor, digite apenas numeros: ");
+        int c;
+        while ((c = getchar()) != '\n' && c != EOF);
+    }
 
     Mecanico *mecanico = buscaMecanicoId(lista_mec, id);
 

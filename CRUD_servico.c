@@ -183,7 +183,12 @@ void listarServico(Lista_servico *lista_servico, Lista_mecanico *lista_mec, List
     {
     case 1:
         printf("\nID: ");
-        scanf("%d", &id);
+        while (scanf("%d", &id) != 1)
+        {
+            printf("ID invalido! Por favor, digite apenas numeros: ");
+            int c;
+            while ((c = getchar()) != '\n' && c != EOF);
+        }
         break;
     case 2:
         printf("\nPlaca do Veiculo: ");
