@@ -162,3 +162,62 @@ void gerenciarServicos(Lista_servico *lista_servico, Lista_mecanico *lista_mec, 
 
     } while (opcao != 6);
 }
+
+void salvarDadosOficina(Lista_mecanico *lista_mec, Lista_veiculo *lista_veiculo, Lista_servico *lista_servico, char *nome_arquivo)
+{
+    FILE *arquivo = fopen(nome_arquivo, "wb");
+    if (arquivo == NULL)
+    {
+        printf("\nErro ao abrir o arquivo para salvar!\n");
+        return;
+    }
+
+    // 1. Salva a lista de Mecânicos
+    fwrite(&lista_mec->qtd_mec, sizeof(int), 1, arquivo);
+    fwrite(&lista_mec->qtd_max, sizeof(int), 1, arquivo);
+    fwrite(lista_mec->mecanicos, sizeof(Mecanico), lista_mec->qtd_mec, arquivo);
+
+    // 2. Salva a lista de Veículos
+    fwrite(&lista_veiculo->qtd_veiculos, sizeof(int), 1, arquivo);
+    fwrite(&lista_veiculo->qtd_max, sizeof(int), 1, arquivo);
+    fwrite(lista_veiculo->veiculos, sizeof(Veiculo), lista_veiculo->qtd_veiculos, arquivo);
+
+    // 3. Salva a lista de Serviços
+    fwrite(&lista_servico->qtd_servicos, sizeof(int), 1, arquivo);
+    fwrite(&lista_servico->qtd_max, sizeof(int), 1, arquivo);
+    fwrite(lista_servico->ordem_servicos, sizeof(Ordem_servico), lista_servico->qtd_servicos, arquivo);
+
+    fclose(arquivo);
+    printf("\nDados da oficina salvos com sucesso!\n");
+}
+
+void carregarDadosOficina(Lista_mecanico *lista_mec, Lista_veiculo *lista_veiculo, Lista_servico *lista_servico, char *nome_arquivo)
+{
+    FILE *arquivo = fopen(nome_arquivo, "rb");
+    if (arquivo == NULL)
+    {
+        printf("\nArquivo de dados nao encontrado. Um novo sera criado ao salvar.\n");
+        return;
+    }
+
+    // 1. Carrega a lista de Mecânicos
+    fread(&lista_mec->qtd_mec, sizeof(int), 1, arquivo);
+    fread(&lista_mec->qtd_max, sizeof(int), 1, arquivo);
+    lista_mec->mecanicos = realloc(lista_mec->mecanicos, lista_mec->qtd_max * sizeof(Mecanico));
+    fread(lista_mec->mecanicos, sizeof(Mecanico), lista_mec->qtd_mec, arquivo);
+
+    // 2. Carrega a lista de Veículos
+    fread(&lista_veiculo->qtd_veiculos, sizeof(int), 1, arquivo);
+    fread(&lista_veiculo->qtd_max, sizeof(int), 1, arquivo);
+    lista_veiculo->veiculos = realloc(lista_veiculo->veiculos, lista_veiculo->qtd_max * sizeof(Veiculo));
+    fread(lista_veiculo->veiculos, sizeof(Veiculo), lista_veiculo->qtd_veiculos, arquivo);
+
+    // 3. Carrega a lista de Serviços
+    fread(&lista_servico->qtd_servicos, sizeof(int), 1, arquivo);
+    fread(&lista_servico->qtd_max, sizeof(int), 1, arquivo);
+    lista_servico->ordem_servicos = realloc(lista_servico->ordem_servicos, lista_servico->qtd_max * sizeof(Ordem_servico));
+    fread(lista_servico->ordem_servicos, sizeof(Ordem_servico), lista_servico->qtd_servicos, arquivo);
+
+    fclose(arquivo);
+    printf("\nDados da oficina carregados com sucesso!\n");
+}

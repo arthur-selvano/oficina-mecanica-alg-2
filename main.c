@@ -11,7 +11,7 @@ int main()
 
     int opcao;
 
-    carregarMecanicos(lista_mecanico, "mecanicos.dat");
+    carregarDadosOficina(lista_mecanico, lista_veiculo, lista_servico, "dados_oficina.bin");
 
     do
     {
@@ -56,7 +56,7 @@ int main()
 
     } while (opcao != 4);
 
-    salvarMecanicos(lista_mecanico, "mecanicos.dat");
+    salvarDadosOficina(lista_mecanico, lista_veiculo, lista_servico, "dados_oficina.bin");
 
     liberarListaMecanico(lista_mecanico);
     liberarListaVeiculo(lista_veiculo);
