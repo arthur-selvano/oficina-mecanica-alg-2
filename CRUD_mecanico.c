@@ -266,3 +266,39 @@ void liberarListaMecanico(Lista_mecanico *lista_mec)
         free(lista_mec);
     }
 }
+
+void salvarMecanicos(Lista_mecanico *lista_mec, char *nome_arquivo)
+{
+    FILE *arquivo = fopen(nome_arquivo, "wb");
+    if (arquivo == NULL)
+    {
+        printf("\nErro ao abrir o arquivo!\n");
+        return;
+    }
+    
+    fwrite(&lista_mec->qtd_mec, sizeof(int), 1, arquivo);
+    fwrite(&lista_mec->qtd_max, sizeof(int), 1, arquivo);
+    fwrite(lista_mec->mecanicos, sizeof(Mecanico), lista_mec->qtd_mec, arquivo);
+    fclose(arquivo);
+}
+
+void carregarMecanicos(Lista_mecanico *lista_mec, char *nome_arquivo)
+{
+    FILE *arquivo = fopen(nome_arquivo, "rb");
+    if (arquivo != NULL)
+    {
+        fread(&lista_mec->qtd_mec, sizeof(int), 1, arquivo);
+        fread(&lista_mec->qtd_max, sizeof(int), 1, arquivo);
+        lista_mec->mecanicos = realloc(lista_mec->mecanicos, lista_mec->qtd_max * sizeof(Mecanico));
+        if (lista_mec->mecanicos == NULL)
+        {
+            printf("\nMemoria insuficiente!\n");
+            return;
+        }
+        fread(lista_mec->mecanicos, sizeof(Mecanico), lista_mec->qtd_mec, arquivo);
+        fclose(arquivo);
+    }else
+    {
+        printf("\nArquivo nao encontrado!\n");
+    }
+}

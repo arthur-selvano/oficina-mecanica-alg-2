@@ -33,4 +33,7 @@ void printMecanico(Mecanico *);
 Lista_mecanico *criarListaMecanico(int);
 void liberarListaMecanico(Lista_mecanico *);
 
+void salvarMecanicos(Lista_mecanico *, char *);
+void carregarMecanicos(Lista_mecanico *, char *);
+
 #endif
