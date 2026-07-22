@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "funcoes_oficina.h"
 
 int switch_case_crud(char tipo[])
@@ -222,77 +223,168 @@ void carregarDadosOficina(Lista_mecanico *lista_mec, Lista_veiculo *lista_veicul
     printf("\nDados da oficina carregados com sucesso!\n");
 }
 
+// Função auxiliar para comparar datas convertendo DD/MM/AAAA para AAAAMMDD (inteiro)
+int converterDataInt(char* data) {
+    int d, m, a;
+    if (sscanf(data, "%d/%d/%d", &d, &m, &a) == 3) {
+        return a * 10000 + m * 100 + d;
+    }
+    return 0;
+}
+
+// Nova função de relatório baseada nos requisitos
 void gerarRelatorioTxt(Lista_mecanico *lista_mec, Lista_veiculo *lista_veiculo, Lista_servico *lista_servico)
 {
-    FILE *arquivo = fopen("relatorio_oficina.txt", "w");
+    int opcao;
     
+    printf("\n====== GERAR RELATORIO (TXT) ======\n");
+    printf("1 - Relatorio por Data de Servico\n");
+    printf("2 - Relatorio por Mecanico\n");
+    printf("3 - Relatorio por Veiculo\n");
+    printf("Escolha uma opcao: ");
+    
+    if (scanf("%d", &opcao) != 1) {
+        opcao = -1;
+    }
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF);
+
+    if (opcao < 1 || opcao > 3) {
+        printf("\nOpcao Invalida!\n");
+        return;
+    }
+
+    FILE *arquivo = fopen("relatorio_filtrado.txt", "w");
     if (arquivo == NULL)
     {
         printf("\nErro ao criar o relatorio!\n");
         return;
     }
 
-    // Cabeçalho Principal
-    fprintf(arquivo, "===========================================================================\n");
-    fprintf(arquivo, "                        RELATORIO GERAL DA OFICINA\n");
-    fprintf(arquivo, "===========================================================================\n\n");
+    // ==========================================================
+    // RELATÓRIO 1: POR DATA DE SERVIÇO
+    // ==========================================================
+    if (opcao == 1) {
+        char data_inicial[15];
+        printf("Digite a data inicial (DD/MM/AAAA): ");
+        scanf("%14s", data_inicial);
+        int data_ini_int = converterDataInt(data_inicial);
 
-    // ----- IMPRIMINDO MECÂNICOS -----
-    fprintf(arquivo, " MECANICOS CADASTRADOS\n");
-    fprintf(arquivo, "---------------------------------------------------------------------------\n");
-    fprintf(arquivo, "| %-4s | %-22s | %-20s | %-15s |\n", "ID", "Nome", "Especialidade", "Salario");
-    fprintf(arquivo, "---------------------------------------------------------------------------\n");
-    if (lista_mec->qtd_mec == 0) {
-        fprintf(arquivo, "| %-71s |\n", "Nenhum mecanico cadastrado.");
-    } else {
-        for (int i = 0; i < lista_mec->qtd_mec; i++) {
-            fprintf(arquivo, "| %-4d | %-22s | %-20s | R$ %-12.2f |\n",
-                    lista_mec->mecanicos[i].id_mecanico,
-                    lista_mec->mecanicos[i].nome,
-                    lista_mec->mecanicos[i].especialidade,
-                    lista_mec->mecanicos[i].salario);
-        }
-    }
-    fprintf(arquivo, "---------------------------------------------------------------------------\n\n");
+        fprintf(arquivo, "========================================================================================\n");
+        fprintf(arquivo, "                    RELATORIO POR DATA DE SERVICO (A PARTIR DE %s)\n", data_inicial);
+        fprintf(arquivo, "========================================================================================\n\n");
+        fprintf(arquivo, "| %-4s | %-12s | %-15s | %-20s | %-20s |\n", "OS", "Data", "Valor Total", "Mecanico", "Veiculo (Modelo)");
+        fprintf(arquivo, "----------------------------------------------------------------------------------------\n");
 
-    // ----- IMPRIMINDO VEÍCULOS -----
-    fprintf(arquivo, " VEICULOS CADASTRADOS\n");
-    fprintf(arquivo, "---------------------------------------------------------------------------\n");
-    fprintf(arquivo, "| %-10s | %-20s | %-6s | %-21s |\n", "Placa", "Modelo", "Ano", "Contato");
-    fprintf(arquivo, "---------------------------------------------------------------------------\n");
-    if (lista_veiculo->qtd_veiculos == 0) {
-        fprintf(arquivo, "| %-71s |\n", "Nenhum veiculo cadastrado.");
-    } else {
-        for (int i = 0; i < lista_veiculo->qtd_veiculos; i++) {
-            fprintf(arquivo, "| %-10s | %-20s | %-6d | %-21s |\n",
-                    lista_veiculo->veiculos[i].placa_veiculo,
-                    lista_veiculo->veiculos[i].modelo,
-                    lista_veiculo->veiculos[i].ano,
-                    lista_veiculo->veiculos[i].telefone_dono);
-        }
-    }
-    fprintf(arquivo, "---------------------------------------------------------------------------\n\n");
-
-    // ----- IMPRIMINDO SERVIÇOS -----
-    fprintf(arquivo, " ORDENS DE SERVICO\n");
-    fprintf(arquivo, "-------------------------------------------------------------------------------------------\n");
-    fprintf(arquivo, "| %-4s | %-12s | %-4s | %-10s | %-25s | %-15s |\n", "OS", "Data", "Mec.", "Placa", "Servico", "Valor");
-    fprintf(arquivo, "-------------------------------------------------------------------------------------------\n");
-    if (lista_servico->qtd_servicos == 0) {
-        fprintf(arquivo, "| %-87s |\n", "Nenhuma ordem de servico cadastrada.");
-    } else {
+        int encontrou = 0;
         for (int i = 0; i < lista_servico->qtd_servicos; i++) {
-            fprintf(arquivo, "| %-4d | %-12s | %-4d | %-10s | %-25s | R$ %-12.2f |\n",
-                    lista_servico->ordem_servicos[i].numero_os,
-                    lista_servico->ordem_servicos[i].data_servico,
-                    lista_servico->ordem_servicos[i].id_mecanico,
-                    lista_servico->ordem_servicos[i].placa_veiculo,
-                    lista_servico->ordem_servicos[i].servico_realizado,
-                    lista_servico->ordem_servicos[i].valor_total);
+            Ordem_servico *os = &lista_servico->ordem_servicos[i];
+            
+            if (converterDataInt(os->data_servico) >= data_ini_int) {
+                encontrou = 1;
+                Mecanico *mec = buscaMecanicoId(lista_mec, os->id_mecanico);
+                Veiculo *vei = buscaVeiculoPlaca(lista_veiculo, os->placa_veiculo);
+                
+                char nome_mec[50] = "Removido/Inexistente";
+                char modelo_vei[50] = "Removido/Inexistente";
+                if (mec != NULL) strcpy(nome_mec, mec->nome);
+                if (vei != NULL) strcpy(modelo_vei, vei->modelo);
+
+                fprintf(arquivo, "| %-4d | %-12s | R$ %-12.2f | %-20s | %-20s |\n", 
+                        os->numero_os, os->data_servico, os->valor_total, nome_mec, modelo_vei);
+            }
         }
+        if (!encontrou) fprintf(arquivo, "| Nenhuma ordem de servico encontrada a partir desta data.\n");
+        fprintf(arquivo, "----------------------------------------------------------------------------------------\n");
+        printf("\nRelatorio salvo com sucesso em 'relatorio_filtrado.txt'!\n");
     }
-    fprintf(arquivo, "-------------------------------------------------------------------------------------------\n");
+
+    // ==========================================================
+    // RELATÓRIO 2: POR MECÂNICO
+    // ==========================================================
+    else if (opcao == 2) {
+        int id_mec;
+        printf("Digite o ID do Mecanico: ");
+        scanf("%d", &id_mec);
+
+        Mecanico *mec = buscaMecanicoId(lista_mec, id_mec);
+        if (mec == NULL) {
+            printf("\nMecanico nao encontrado!\n");
+            fclose(arquivo);
+            remove("relatorio_filtrado.txt");
+            return;
+        }
+
+        fprintf(arquivo, "========================================================================================\n");
+        fprintf(arquivo, "                               RELATORIO POR MECANICO\n");
+        fprintf(arquivo, "========================================================================================\n");
+        fprintf(arquivo, "Mecanico: %s | Especialidade: %s\n", mec->nome, mec->especialidade);
+        fprintf(arquivo, "----------------------------------------------------------------------------------------\n\n");
+        fprintf(arquivo, "| %-4s | %-12s | %-25s | %-35s |\n", "OS", "Data", "Veiculo (Modelo)", "Servico Realizado");
+        fprintf(arquivo, "----------------------------------------------------------------------------------------\n");
+
+        int encontrou = 0;
+        for (int i = 0; i < lista_servico->qtd_servicos; i++) {
+            Ordem_servico *os = &lista_servico->ordem_servicos[i];
+            
+            if (os->id_mecanico == id_mec) {
+                encontrou = 1;
+                Veiculo *vei = buscaVeiculoPlaca(lista_veiculo, os->placa_veiculo);
+                char modelo_vei[50] = "Removido/Inexistente";
+                if (vei != NULL) strcpy(modelo_vei, vei->modelo);
+
+                fprintf(arquivo, "| %-4d | %-12s | %-25s | %-35s |\n", 
+                        os->numero_os, os->data_servico, modelo_vei, os->servico_realizado);
+            }
+        }
+        if (!encontrou) fprintf(arquivo, "| Nenhum servico realizado por este mecanico.\n");
+        fprintf(arquivo, "----------------------------------------------------------------------------------------\n");
+        printf("\nRelatorio salvo com sucesso em 'relatorio_filtrado.txt'!\n");
+    }
+
+    // ==========================================================
+    // RELATÓRIO 3: POR VEÍCULO
+    // ==========================================================
+    else if (opcao == 3) {
+        char placa[10];
+        printf("Digite a Placa do Veiculo: ");
+        scanf("%9s", placa);
+        placaMaiusculo(placa); 
+
+        Veiculo *vei = buscaVeiculoPlaca(lista_veiculo, placa);
+        if (vei == NULL) {
+            printf("\nVeiculo nao encontrado!\n");
+            fclose(arquivo);
+            remove("relatorio_filtrado.txt");
+            return;
+        }
+
+        fprintf(arquivo, "========================================================================================\n");
+        fprintf(arquivo, "                               RELATORIO POR VEICULO\n");
+        fprintf(arquivo, "========================================================================================\n");
+        fprintf(arquivo, "Placa: %s | Modelo: %s | Ano: %d\n", vei->placa_veiculo, vei->modelo, vei->ano);
+        fprintf(arquivo, "----------------------------------------------------------------------------------------\n\n");
+        fprintf(arquivo, "| %-4s | %-12s | %-20s | %-40s |\n", "OS", "Data", "Mecanico", "Servico Realizado");
+        fprintf(arquivo, "----------------------------------------------------------------------------------------\n");
+
+        int encontrou = 0;
+        for (int i = 0; i < lista_servico->qtd_servicos; i++) {
+            Ordem_servico *os = &lista_servico->ordem_servicos[i];
+            
+            if (strcmp(os->placa_veiculo, placa) == 0) {
+                encontrou = 1;
+                Mecanico *mec = buscaMecanicoId(lista_mec, os->id_mecanico);
+                char nome_mec[50] = "Removido/Inexistente";
+                if (mec != NULL) strcpy(nome_mec, mec->nome);
+
+                fprintf(arquivo, "| %-4d | %-12s | %-20s | %-40s |\n", 
+                        os->numero_os, os->data_servico, nome_mec, os->servico_realizado);
+            }
+        }
+        if (!encontrou) fprintf(arquivo, "| Nenhum historico de servico para este veiculo.\n");
+        fprintf(arquivo, "----------------------------------------------------------------------------------------\n");
+        printf("\nRelatorio salvo com sucesso em 'relatorio_filtrado.txt'!\n");
+    }
 
     fclose(arquivo);
-    printf("\nRelatorio 'relatorio_oficina.txt' gerado com sucesso com tabelas formatadas!\n");
 }
