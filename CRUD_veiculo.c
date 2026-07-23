@@ -47,7 +47,7 @@ void cadastrarVeiculo(Lista_veiculo *lista_veiculo)
     } while (buscaVeiculoPlaca(lista_veiculo, NovoVeiculo->placa_veiculo) != NULL);
 
     printf("Modelo: ");
-    scanf(" %[^\n]", NovoVeiculo->modelo);
+    scanf(" %49[^\n]", NovoVeiculo->modelo);
 
     printf("Ano: ");
     scanf("%d", &NovoVeiculo->ano);
@@ -143,7 +143,7 @@ void alterarVeiculo(Lista_veiculo *lista_veiculo)
     }
 
     printf("Novo modelo: ");
-    scanf(" %[^\n]", veiculo->modelo);
+    scanf(" %49[^\n]", veiculo->modelo);
 
     printf("Novo ano: ");
     scanf("%d", &veiculo->ano);

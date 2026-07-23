@@ -47,10 +47,10 @@ void cadastrarMecanico(Lista_mecanico *lista_mec)
     } while (buscaMecanicoId(lista_mec, NovoMecanico->id_mecanico) != NULL);
 
     printf("Nome: ");
-    scanf(" %[^\n]", NovoMecanico->nome);
+    scanf(" %49[^\n]", NovoMecanico->nome);
 
     printf("Especialidade: ");
-    scanf(" %[^\n]", NovoMecanico->especialidade);
+    scanf(" %49[^\n]", NovoMecanico->especialidade);
 
     printf("Salario: ");
     while (scanf("%f", &NovoMecanico->salario) != 1)
@@ -101,10 +101,10 @@ void alterarMecanico(Lista_mecanico *lista_mec)
     printf("\nMecanico encontrado!\n");
 
     printf("Novo nome: ");
-    scanf(" %[^\n]", mecanico->nome);
+    scanf(" %49[^\n]", mecanico->nome);
 
     printf("Nova especialidade: ");
-    scanf(" %[^\n]", mecanico->especialidade);
+    scanf(" %49[^\n]", mecanico->especialidade);
 
     printf("Novo salario: ");
     while (scanf("%f", &mecanico->salario) != 1)

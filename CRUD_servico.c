@@ -45,7 +45,7 @@ void cadastrarServico(Lista_servico *lista_servico, Lista_mecanico *lista_mec, L
     scanf("%14s", NovoServico->data_servico);
 
     printf("Servico realizado: ");
-    scanf(" %[^\n]", NovoServico->servico_realizado);
+    scanf(" %199[^\n]", NovoServico->servico_realizado);
 
     printf("Valor total: ");
     scanf("%f", &NovoServico->valor_total);
@@ -82,7 +82,7 @@ void alterarServico(Lista_servico *lista_servico, Lista_mecanico *lista_mec, Lis
     scanf("%14s", Servico->data_servico);
 
     printf("Servico realizado: ");
-    scanf(" %[^\n]", Servico->servico_realizado);
+    scanf(" %199[^\n]", Servico->servico_realizado);
 
     printf("Valor total: ");
     scanf("%f", &Servico->valor_total);
@@ -259,7 +259,7 @@ void listarServico(Lista_servico *lista_servico, Lista_mecanico *lista_mec, List
             }
 
             printf("\nServico Realizado: %s", servico->servico_realizado);
-            printf("\nValor Total: %.2f", servico->valor_total);
+            printf("\nValor Total: R$%.2f", servico->valor_total);
             printf("\n=================================");
         }
     }
