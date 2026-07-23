@@ -259,6 +259,7 @@ void listarServico(Lista_servico *lista_servico, Lista_mecanico *lista_mec, List
             }
 
             printf("\nServico Realizado: %s", servico->servico_realizado);
+            printf("\nValor Total: %.2f", servico->valor_total);
             printf("\n=================================");
         }
     }
