@@ -53,7 +53,7 @@ void cadastrarVeiculo(Lista_veiculo *lista_veiculo)
     scanf("%d", &NovoVeiculo->ano);
 
     printf("Telefone do proprietario: ");
-    scanf("%14s", NovoVeiculo->telefone_dono);
+    scanf(" %19[^\n]", NovoVeiculo->telefone_dono);
 
     (lista_veiculo->qtd_veiculos)++;
 

@@ -7,7 +7,7 @@ typedef struct
     char placa_veiculo[10];
     char modelo[50];
     int ano;
-    char telefone_dono[15];
+    char telefone_dono[20];
 } Veiculo;
 
 typedef struct Lista_veiculo
