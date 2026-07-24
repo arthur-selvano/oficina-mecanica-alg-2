@@ -149,7 +149,7 @@ void alterarVeiculo(Lista_veiculo *lista_veiculo)
     scanf("%d", &veiculo->ano);
 
     printf("Novo telefone do proprietario: ");
-    scanf("%14s", veiculo->telefone_dono);
+    scanf(" %19[^\n]", veiculo->telefone_dono);
 
     printf("\nVeiculo alterado com sucesso!\n");
 }
