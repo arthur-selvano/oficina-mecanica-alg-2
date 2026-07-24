@@ -1,26 +1,43 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "CRUD_mecanico.h"
+#include "funcoes_oficina.h"
 
 //===========================================================================
 // FUNÇÃO 1 CADASTRO_MECANICO;
 
 void cadastrarMecanico(Lista_mecanico *lista_mec)
 {
-    Mecanico *NovoMecanico = &lista_mec->mecanicos[lista_mec->qtd_mec];
 
     printf("\n====== CADASTRO DE MECANICO ======\n");
 
-    if (lista_mec->qtd_mec >= lista_mec->qtd_max)
+    if (lista_mec->qtd_mec >= lista_mec->qtd_max) // checa se a lista esta cheia
     {
-        printf("\nErro: Limite maximo de %d mecanicos atingido!\n", lista_mec->qtd_max);
-        return;
+        int nova_capacidade = lista_mec->qtd_max + 5;                                             // se estiver cheia ele calcula um novo limite com +5 vagas
+        Mecanico *temporario = realloc(lista_mec->mecanicos, nova_capacidade * sizeof(Mecanico)); // realoca para mais 5;
+
+        if (temporario == NULL)
+        {
+            printf("\nMemoria insuficiente!\n");
+            return;
+        }
+
+        lista_mec->mecanicos = temporario;
+        lista_mec->qtd_max = nova_capacidade; // Atualizando
+        printf("\n Limite atingido. Capacidade de mecanicos aumentada para: %d\n", lista_mec->qtd_max);
     }
+
+    Mecanico *NovoMecanico = &lista_mec->mecanicos[lista_mec->qtd_mec];
 
     do
     {
         printf("ID: ");
-        scanf("%d", &NovoMecanico->id_mecanico);
+        while (scanf("%d", &NovoMecanico->id_mecanico) != 1)
+        {
+            printf("ID invalido! Por favor, digite apenas numeros: ");
+            int c;
+            while ((c = getchar()) != '\n' && c != EOF);
+        }
 
         if (buscaMecanicoId(lista_mec, NovoMecanico->id_mecanico) != NULL)
         {
@@ -30,13 +47,24 @@ void cadastrarMecanico(Lista_mecanico *lista_mec)
     } while (buscaMecanicoId(lista_mec, NovoMecanico->id_mecanico) != NULL);
 
     printf("Nome: ");
-    scanf(" %[^\n]", NovoMecanico->nome);
+    scanf(" %49[^\n]", NovoMecanico->nome);
 
     printf("Especialidade: ");
-    scanf(" %[^\n]", NovoMecanico->especialidade);
+    scanf(" %49[^\n]", NovoMecanico->especialidade);
 
     printf("Salario: ");
-    scanf("%f", &NovoMecanico->salario);
+    while (scanf("%f", &NovoMecanico->salario) != 1)
+    {
+        printf("Valor invalido! Por favor, digite apenas numeros para o salario: ");
+        
+        // Limpa o lixo (letras) do buffer do teclado
+        int c;
+        while ((c = getchar()) != '\n' && c != EOF);
+    }
+    
+    // Limpa o 'Enter' final para não atrapalhar futuras leituras
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF);
 
     (lista_mec->qtd_mec)++;
 }
@@ -48,13 +76,19 @@ void alterarMecanico(Lista_mecanico *lista_mec)
 
     int id;
 
-    if(!existeRegistro(lista_mec)){
+    if (!existeRegistro(lista_mec))
+    {
         return;
     }
 
     printf("\n====== ALTERAR MECANICO ======\n");
     printf("Digite o ID do mecanico: ");
-    scanf("%d", &id);
+    while (scanf("%d", &id) != 1)
+    {
+        printf("ID invalido! Por favor, digite apenas numeros: ");
+        int c;
+        while ((c = getchar()) != '\n' && c != EOF);
+    }
 
     Mecanico *mecanico = buscaMecanicoId(lista_mec, id);
 
@@ -66,17 +100,23 @@ void alterarMecanico(Lista_mecanico *lista_mec)
 
     printf("\nMecanico encontrado!\n");
 
-    printf("Novo ID: ");
-    scanf("%d", &mecanico->id_mecanico);
-
     printf("Novo nome: ");
-    scanf(" %[^\n]", mecanico->nome);
+    scanf(" %49[^\n]", mecanico->nome);
 
     printf("Nova especialidade: ");
-    scanf(" %[^\n]", mecanico->especialidade);
+    scanf(" %49[^\n]", mecanico->especialidade);
 
     printf("Novo salario: ");
-    scanf("%f", &mecanico->salario);
+    while (scanf("%f", &mecanico->salario) != 1)
+    {
+        printf("Valor invalido! Por favor, digite apenas numeros para o salario: ");
+        
+        int c;
+        while ((c = getchar()) != '\n' && c != EOF);
+    }
+    
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF);
 
     printf("\nAtualizado com sucesso!\n");
     return;
@@ -87,13 +127,19 @@ void alterarMecanico(Lista_mecanico *lista_mec)
 
 void consultarMecanico(Lista_mecanico *lista_mec)
 {
-    if(!existeRegistro(lista_mec)){
+    if (!existeRegistro(lista_mec))
+    {
         return;
     }
     int id;
 
     printf("Digite o ID do mecanico: ");
-    scanf("%d", &id);
+    while (scanf("%d", &id) != 1)
+    {
+        printf("ID invalido! Por favor, digite apenas numeros: ");
+        int c;
+        while ((c = getchar()) != '\n' && c != EOF);
+    }
 
     Mecanico *mecanico = buscaMecanicoId(lista_mec, id);
 
@@ -110,18 +156,24 @@ void consultarMecanico(Lista_mecanico *lista_mec)
 //===========================================================================
 // FUNÇÃO 4 REMOVE_MECANICO;
 
-void removerMecanico(Lista_mecanico *lista_mec)
+void removerMecanico(Lista_mecanico *lista_mec, Lista_servico *lista_servico)
 {
     int *qtd = &lista_mec->qtd_mec;
     int id;
 
-    if(!existeRegistro(lista_mec)){
+    if (!existeRegistro(lista_mec))
+    {
         return;
     }
 
     printf("\n====== REMOVER MECANICO ======\n");
     printf("Digite o ID do mecanico: ");
-    scanf("%d", &id);
+    while (scanf("%d", &id) != 1)
+    {
+        printf("ID invalido! Por favor, digite apenas numeros: ");
+        int c;
+        while ((c = getchar()) != '\n' && c != EOF);
+    }
 
     Mecanico *mecanico = buscaMecanicoId(lista_mec, id);
 
@@ -129,6 +181,15 @@ void removerMecanico(Lista_mecanico *lista_mec)
     {
         printf("\nMecanico nao encontrado!\n");
         return;
+    }
+
+    for (int i = 0; i < lista_servico->qtd_servicos; i++)
+    {
+        if (lista_servico->ordem_servicos[i].id_mecanico == id)
+        {
+            printf("Remocao negada, ha registro do mecanico\nem uma ordem de servio\n");
+            return;
+        }
     }
 
     for (int i = 0; i < *qtd; i++)
@@ -142,6 +203,19 @@ void removerMecanico(Lista_mecanico *lista_mec)
             }
             (*qtd)--;
             printf("\nMecanico removido com sucesso!\n");
+
+            int espacos_livres = lista_mec->qtd_max - lista_mec->qtd_mec;
+            if (espacos_livres > 5)
+            {
+                int nova_capacidade = lista_mec->qtd_max - 5;
+                Mecanico *temporario = realloc(lista_mec->mecanicos, nova_capacidade * sizeof(Mecanico));
+                if (temporario != NULL)
+                {
+                    lista_mec->mecanicos = temporario;
+                    lista_mec->qtd_max = nova_capacidade;
+                    printf("Memoria otimizada. Nova capacidade de mecanicos: %d\n", lista_mec->qtd_max);
+                }
+            }
             return;
         }
     }
@@ -158,7 +232,8 @@ void printMecanico(Mecanico *mecanico)
 void listarMecanicos(Lista_mecanico *lista_mec)
 {
 
-    if(!existeRegistro(lista_mec)){
+    if (!existeRegistro(lista_mec))
+    {
         return;
     }
 
@@ -188,8 +263,9 @@ Mecanico *buscaMecanicoId(Lista_mecanico *lista_mec, int id_mecanico) // busca m
     return NULL;
 }
 
-int existeRegistro(Lista_mecanico *lista_mec){
-    if (lista_mec->qtd_mec == 0) 
+int existeRegistro(Lista_mecanico *lista_mec)
+{
+    if (lista_mec->qtd_mec == 0)
     {
         printf("\nNenhum mecanico cadastrado.\n");
         return 0;
@@ -199,22 +275,35 @@ int existeRegistro(Lista_mecanico *lista_mec){
 
 Lista_mecanico *criarListaMecanico(int tamanho)
 {
+
     Lista_mecanico *lista_mec = malloc(sizeof(Lista_mecanico));
-    lista_mec->qtd_mec = 0;
-    lista_mec->qtd_max = tamanho;
-    lista_mec->mecanicos = malloc(tamanho * sizeof(Mecanico));
 
     if (lista_mec == NULL)
     {
         printf("\nMemoria insuficiente!\n");
         return NULL;
     }
+    lista_mec->qtd_mec = 0;
+    lista_mec->qtd_max = tamanho;
+    lista_mec->mecanicos = malloc(tamanho * sizeof(Mecanico));
+
+    if (lista_mec->mecanicos == NULL)
+    {
+        printf("\nMemoria Insuficiente!\n");
+        free(lista_mec);
+        return NULL;
+    }
+
     return lista_mec;
 }
 
-
 void liberarListaMecanico(Lista_mecanico *lista_mec)
 {
-    free(lista_mec->mecanicos);
-    free(lista_mec);
+    if (lista_mec != NULL)
+    {
+
+        free(lista_mec->mecanicos);
+        free(lista_mec);
+    }
 }
+

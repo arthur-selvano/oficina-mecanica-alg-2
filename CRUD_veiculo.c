@@ -3,27 +3,42 @@
 #include <string.h>
 #include <ctype.h>
 #include "CRUD_veiculo.h"
+#include "funcoes_oficina.h"
 
 // ==================== CRUD VEÍCULOS ====================
 
 void cadastrarVeiculo(Lista_veiculo *lista_veiculo)
 {
 
-    Veiculo *NovoVeiculo = &lista_veiculo->veiculos[lista_veiculo->qtd_veiculos];
-
     if (lista_veiculo->qtd_veiculos >= lista_veiculo->qtd_max)
     {
-        printf("\nLimite de veiculos atingido!\n");
-        return;
+
+        int nova_capacidade = lista_veiculo->qtd_max + 5;
+
+        Veiculo *temporario = realloc(
+            lista_veiculo->veiculos,
+            nova_capacidade * sizeof(Veiculo));
+
+        if (temporario == NULL)
+        {
+            printf("\nErro: memoria insuficiente!\n");
+            return;
+        }
+
+        lista_veiculo->veiculos = temporario;
+        lista_veiculo->qtd_max = nova_capacidade;
+        printf("\nlimite atingido. Capacidade de veiculos aumentada para: %d\n", lista_veiculo->qtd_max);
     }
 
+    Veiculo *NovoVeiculo = &lista_veiculo->veiculos[lista_veiculo->qtd_veiculos];
+
+    // remoção do if pois o realloc ja garante espaço disponivel
     do
     {
         printf("\nPlaca: ");
         scanf("%9s", NovoVeiculo->placa_veiculo);
-        strcpy(NovoVeiculo->placa_veiculo, placaMaiusculo(NovoVeiculo->placa_veiculo));
+        placaMaiusculo(NovoVeiculo->placa_veiculo);
 
-        
         if (buscaVeiculoPlaca(lista_veiculo, NovoVeiculo->placa_veiculo) != NULL)
         {
             printf("Atenção essa placa ja existe!\n\n");
@@ -32,13 +47,13 @@ void cadastrarVeiculo(Lista_veiculo *lista_veiculo)
     } while (buscaVeiculoPlaca(lista_veiculo, NovoVeiculo->placa_veiculo) != NULL);
 
     printf("Modelo: ");
-    scanf(" %[^\n]", NovoVeiculo->modelo);
+    scanf(" %49[^\n]", NovoVeiculo->modelo);
 
     printf("Ano: ");
     scanf("%d", &NovoVeiculo->ano);
 
     printf("Telefone do proprietario: ");
-    scanf("%14s", NovoVeiculo->telefone_dono);
+    scanf(" %19[^\n]", NovoVeiculo->telefone_dono);
 
     (lista_veiculo->qtd_veiculos)++;
 
@@ -48,7 +63,8 @@ void cadastrarVeiculo(Lista_veiculo *lista_veiculo)
 void listarVeiculos(Lista_veiculo *lista_veiculo)
 {
 
-    if(!existeRegistroVeiculo(lista_veiculo)){
+    if (!existeRegistroVeiculo(lista_veiculo))
+    {
         return;
     }
 
@@ -70,14 +86,15 @@ void printVeiculo(Veiculo *veiculo)
 
 void consultarVeiculo(Lista_veiculo *lista_veiculo)
 {
-    if(!existeRegistroVeiculo(lista_veiculo)){
+    if (!existeRegistroVeiculo(lista_veiculo))
+    {
         return;
-    } 
+    }
     char placa[10];
 
     printf("\nDigite a placa do veiculo: ");
     scanf("%9s", placa);
-    strcpy(placa, placaMaiusculo(placa));
+    placaMaiusculo(placa);
 
     Veiculo *veiculo = buscaVeiculoPlaca(lista_veiculo, placa);
 
@@ -106,7 +123,8 @@ Veiculo *buscaVeiculoPlaca(Lista_veiculo *lista_veiculo, char placa[10])
 
 void alterarVeiculo(Lista_veiculo *lista_veiculo)
 {
-    if(!existeRegistroVeiculo(lista_veiculo)){
+    if (!existeRegistroVeiculo(lista_veiculo))
+    {
         return;
     }
 
@@ -114,7 +132,7 @@ void alterarVeiculo(Lista_veiculo *lista_veiculo)
 
     printf("\nDigite a placa do veiculo: ");
     scanf("%9s", placa);
-    strcpy(placa, placaMaiusculo(placa));
+    placaMaiusculo(placa);
 
     Veiculo *veiculo = buscaVeiculoPlaca(lista_veiculo, placa);
 
@@ -125,7 +143,7 @@ void alterarVeiculo(Lista_veiculo *lista_veiculo)
     }
 
     printf("Novo modelo: ");
-    scanf(" %[^\n]", veiculo->modelo);
+    scanf(" %49[^\n]", veiculo->modelo);
 
     printf("Novo ano: ");
     scanf("%d", &veiculo->ano);
@@ -136,23 +154,31 @@ void alterarVeiculo(Lista_veiculo *lista_veiculo)
     printf("\nVeiculo alterado com sucesso!\n");
 }
 
-void removerVeiculo(Lista_veiculo *veiculos)
+void removerVeiculo(Lista_veiculo *veiculos, Lista_servico *lista_servico)
 {
-    if(!existeRegistroVeiculo(veiculos)){
+    if (!existeRegistroVeiculo(veiculos))
+    {
         return;
     }
     char placa[10];
 
     printf("\nDigite a placa do veiculo: ");
     scanf("%9s", placa);
-    strcpy(placa, placaMaiusculo(placa));
-
-    
+    placaMaiusculo(placa);
 
     if (buscaVeiculoPlaca(veiculos, placa) == NULL)
     {
         printf("\nVeiculo nao encontrado.\n");
         return;
+    }
+
+    for (int i = 0; i < lista_servico->qtd_servicos; i++)
+    {
+        if (strcmp(lista_servico->ordem_servicos[i].placa_veiculo, placa) == 0)
+        {
+            printf("Remocao negada, ha registro da placa do veiculo\nem uma ordem de servico\n");
+            return;
+        }
     }
 
     for (int i = 0; i < veiculos->qtd_veiculos; i++)
@@ -165,13 +191,29 @@ void removerVeiculo(Lista_veiculo *veiculos)
             }
             (veiculos->qtd_veiculos)--;
             printf("\nVeiculo removido com sucesso!\n");
+
+            int espacos_livres = veiculos->qtd_max - veiculos->qtd_veiculos;
+            if (espacos_livres > 5)
+            {
+                int nova_capacidade = veiculos->qtd_max - 5;
+
+                Veiculo *temporario = realloc(veiculos->veiculos, nova_capacidade * sizeof(Veiculo));
+
+                if (temporario != NULL)
+                {
+                    veiculos->veiculos = temporario;
+                    veiculos->qtd_max = nova_capacidade;
+                    printf("Memoria otimizada. Nova capacidade de veiculos: %d\n", veiculos->qtd_max);
+                }
+            }
             return;
         }
     }
 }
 
-int existeRegistroVeiculo(Lista_veiculo *lista_veiculo){
-    if (lista_veiculo->qtd_veiculos == 0) 
+int existeRegistroVeiculo(Lista_veiculo *lista_veiculo)
+{
+    if (lista_veiculo->qtd_veiculos == 0)
     {
         printf("\nNenhum veiculo cadastrado.\n");
         return 0;
@@ -179,24 +221,34 @@ int existeRegistroVeiculo(Lista_veiculo *lista_veiculo){
     return 1;
 }
 
-char* placaMaiusculo(char placa[10]){
+char *placaMaiusculo(char placa[10])
+{
     for (int i = 0; placa[i] != '\0'; i++)
-        {
-            placa[i] = toupper(placa[i]);
-        }
-        return placa;
+    {
+        placa[i] = toupper(placa[i]);
+    }
+    return placa;
 }
 
 Lista_veiculo *criarListaVeiculo(int tamanho)
 {
     Lista_veiculo *lista_veiculo = malloc(sizeof(Lista_veiculo));
-    lista_veiculo->qtd_veiculos = 0;
-    lista_veiculo->qtd_max = tamanho;
-    lista_veiculo->veiculos = malloc(tamanho * sizeof(Veiculo));
-
+    // conferindo validando;
     if (lista_veiculo == NULL)
     {
+        printf("\nErro: Memoria insulficiente\n");
+        return NULL;
+    }
+
+    lista_veiculo->qtd_veiculos = 0;
+    lista_veiculo->qtd_max = tamanho;
+
+    lista_veiculo->veiculos = malloc(tamanho * sizeof(Veiculo));
+
+    if (lista_veiculo->veiculos == NULL)
+    { // conferindo validando;
         printf("\nMemoria insuficiente!\n");
+        free(lista_veiculo);
         return NULL;
     }
     return lista_veiculo;
@@ -204,6 +256,10 @@ Lista_veiculo *criarListaVeiculo(int tamanho)
 
 void liberarListaVeiculo(Lista_veiculo *lista_veiculo)
 {
-    free(lista_veiculo->veiculos);
-    free(lista_veiculo);
+    // if de segurança conferindo;
+    if (lista_veiculo != NULL)
+    {
+        free(lista_veiculo->veiculos);
+        free(lista_veiculo);
+    }
 }
