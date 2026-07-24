@@ -1,0 +1,28 @@
+========================================================================================
+REGISTROS PARA ADICIONADOS NO SISTEMA
+========================================================================================
+--- MECANICOS --
+(Formato esperado: ID | Nome | Especialidade | Salario)---------------------------------------------------------------------------------------
+1  | Rafael Silva        | Motor                 | 3500.00
+2  | Lucas Santos        | Suspensao             | 3200.00
+3  | Carlos Mendes       | Eletrica              | 3800.00
+4  | Joao Pedro          | Freios                | 3100.00
+5  | Marcos Antonio      | Ar Condicionado       | 3600.00
+6  | Paulo Cesar         | Injecao Eletronica    | 4000.00
+7  | Felipe Costa        | Cambio                | 3900.00
+8  | Ricardo Alves       | Alinhamento           | 2900.00
+9  | Andre Luiz          | Lanternagem           | 3400.00
+10 | Bruno Fernandes     | Mecanica Geral        | 3000.00
+--- VEICULOS --
+(Formato esperado: Placa | Modelo | Ano | Telefone do Proprietario)---------------------------------------------------------------------------------------
+ABC1234 | Astra               | 2005 | 11999991111
+DEF5678 | Civic               | 2018 | 11999992222
+GHI9012 | Gol                 | 2015 | 11999993333
+JKL3456 | Corolla             | 2020 | 11999994444
+MNO7890 | Onix                | 2019 | 11999995555
+PQR1234 | HB20                | 2021 | 11999996666
+STU5678 | Fusca               | 1980 | 11999997777
+VWX9012 | Ranger              | 2017 | 11999998888
+YZA3456 | Compass             | 2022 | 11999999999
+BCD7890 | Hilux               | 2023 | 11999990000
+=======================================================================================
